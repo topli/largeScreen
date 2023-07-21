@@ -1,10 +1,11 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <LargePageMain></LargePageMain>
 </template>
 
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
+// import HelloWorld from './components/HelloWorld.vue';
+import LargePageMain from '@/views/largeScreenMain/index.vue'
+
 </script>
 
 <style lang="scss">
@@ -12,9 +13,11 @@ import HelloWorld from './components/HelloWorld.vue';
 @import './styles/layout/app.scss';
 
 #app {
+  @include wh(100%, 100%);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  background-color: #2c3e50;
+  position: relative;
 }
 </style>

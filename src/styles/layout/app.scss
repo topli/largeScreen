@@ -2,3 +2,9 @@
 html, body {
   @include wh(100%, 100%)
 }
+html {
+  overflow: hidden;
+}
+body {
+  overflow: hidden;
+}

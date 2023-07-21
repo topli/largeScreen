@@ -1,0 +1,4 @@
+@import '../mixins/common.scss';
+html, body {
+  @include wh(100%, 100%)
+}

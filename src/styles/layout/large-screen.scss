@@ -1,0 +1,21 @@
+$headerHeight: 4rem;
+
+.large-screen-main {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .screen-container {
+    position: relative;
+    background-color: aqua;
+    .screen-header-container {
+      position: absolute;
+      height: $headerHeight;
+      width: 100%;
+      background-color: red;
+    }
+    .screen-content-container {
+      padding-top: $headerHeight;
+    }
+  }
+}

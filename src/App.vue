@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 // import HelloWorld from './components/HelloWorld.vue';
-import LargePageMain from '@/views/largeScreenMain/index.vue'
+import LargePageMain from '@/views/largeScreen/index.vue'
 
 </script>
 

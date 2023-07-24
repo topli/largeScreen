@@ -9,10 +9,10 @@ const defDesignSize = {
 export default {
   designScale: 0,
   defDesignSize: defDesignSize,
-  largeScreenSize: defDesignSize,
+  screenSize: defDesignSize,
   _setRemUnit() {
     const docEl = document.documentElement
-    const rem = this.largeScreenSize.width / 100
+    const rem = this.screenSize.width / 100
     docEl.style.fontSize = rem + "px"
   },
   _setScreenSize() {
@@ -34,7 +34,7 @@ export default {
       layoutSize.width = Math.floor(clientWidth)
     }
     console.log(layoutSize);
-    this.largeScreenSize = layoutSize
+    this.screenSize = layoutSize
   },
   _windowResize() {
     this._setScreenSize()

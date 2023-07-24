@@ -1,10 +1,9 @@
 <template>
-  <LargePageMain></LargePageMain>
+  <Project></Project>
 </template>
 
 <script setup lang="ts">
-// import HelloWorld from './components/HelloWorld.vue';
-import LargePageMain from '@/views/largeScreen/index.vue'
+import Project from '@/views/project/index.vue'
 
 </script>
 
@@ -17,7 +16,7 @@ import LargePageMain from '@/views/largeScreen/index.vue'
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #2c3e50;
+  background-color: #020E18;
   position: relative;
 }
 </style>

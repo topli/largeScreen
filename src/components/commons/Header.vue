@@ -23,8 +23,6 @@ defineProps(['title'])
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.68rem;
-    font-family: YouSheBiaoTiHei;
-    color: #FFFFFF;
     line-height: 52px;
     letter-spacing: 10px;
     background: linear-gradient(180deg, #FFFFFF 0%, #AAABAB 100%);

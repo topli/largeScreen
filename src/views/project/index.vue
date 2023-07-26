@@ -4,29 +4,30 @@
     <div class="project-body">
       <div class="project-body-left">
         <ScreenCard title="科室项目分布">
-          <div style="height: 22rem">
-            <Echarts :options="ecOptions.options1"></Echarts>
-          </div>
+          <Echarts style="height: 23rem" :options="ecOptions.options1"></Echarts>
         </ScreenCard>
         <ScreenCard title="项目进展分析">
-          <div style="height: 22rem">
-            <Echarts :options="ecOptions.options2"></Echarts>
-          </div>
+          <Echarts style="height: 23rem" :options="ecOptions.options2"></Echarts>
         </ScreenCard>
       </div>
       <div class="project-body-center">
-        <div class="map" ref="mapRef" id="map"></div>
+        <div class="center-header">
+          <div class="title">项目区域分布</div>
+          <Total v-model="testData"></Total>
+        </div>
+        <div style="height: 35rem" class="map" ref="mapRef" id="map"></div>
+        <div class="project-status">
+          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
+          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
+          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
+        </div>
       </div>
       <div class="project-body-right">
         <ScreenCard title="大区统计">
-          <div style="height: 22rem">
-            <Echarts :options="ecOptions.options3"></Echarts>
-          </div>
+          <Echarts style="height: 23rem" :options="ecOptions.options3"></Echarts>
         </ScreenCard>
         <ScreenCard title="领域分布">
-          <div style="height: 22rem">
-            <Echarts :options="ecOptions.options4"></Echarts>
-          </div>
+          <Echarts style="height: 23rem" :options="ecOptions.options4"></Echarts>
         </ScreenCard>
       </div>
     </div>
@@ -42,7 +43,8 @@ import { onMounted, onUnmounted, reactive, ref } from "vue"
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 
-import { pathSymbols, MAP_LEVEL } from "./constant"
+import { pathSymbols, projectStatusPie, MAP_LEVEL } from "./constant"
+import Total from "@/components/commons/Total.vue"
 
 const mapRef = ref()
 const mapState = reactive<{
@@ -72,6 +74,15 @@ const initMap = () => {
     }, 200)
   }
 }
+
+const testData = [
+  { label: '区域项目总数', value: '554', unit: '单位'},
+  { label: '区域在研项目数', value: '541', unit: '单位'},
+  { label: '在研产品数', value: '897', unit: '单位'},
+  { label: '区域客户数', value: '771', unit: '单位'},
+  { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
+  { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+]
 
 const resize = () => {
   mapState.ins?.resize()
@@ -105,30 +116,29 @@ const renderMap = (map: string, data: any) => {
   option = {
     // 地理坐标系组件
     geo: {
+      type: 'map',
       map: map,
-      tooltip: {
-        show: false,
-      },
-      roam: false, // 禁用缩放
-      animationDuration: 400,
-      animationEasing: "cubicOut",
-      animationDurationUpdate: 400,
+      top: 10,
+      bottom: 10,
       itemStyle: {
         borderColor: '#ffffff',
-        borderWidth: 1,
+        borderWidth: 3,
+        // shadowColor: '#ffffff',
+        // shadowColor:'red',
         shadowColor: '#00F6FF',
-        shadowBlur: 10,
+        // shadowColor:'red',
+        shadowBlur: 15,
       }
     },
     // tooltip: {
-    //   show: true,
-    //   trigger: "item",
-    //   formatter: function (params: any) {
-    //     let value = params.value || 0
-    //     return params.name + ":" + value
-    //   },
-    //   backgroundColor: "rgba(0, 26, 33, 0.68)",
-    //   borderColor: "#01525b",
+    // show: true,
+    // trigger: "item",
+    // formatter: function (params: any) {
+    // let value = params.value || 0
+    // return params.name + ":" + value
+    // },
+    // backgroundColor: "rgba(0, 26, 33, 0.68)",
+    // borderColor: "#01525b",
     // },
     roam: false, // 禁用缩放
     animationEasing: "cubicOut",
@@ -141,48 +151,50 @@ const renderMap = (map: string, data: any) => {
         tooltip: {
           show: true,
         },
-        nameMap: {
-          china: "中国",
-        },
+        top: 10,
+        bottom: 10,
         data: data,
         itemStyle: {
           borderColor: 'rgba(111, 253, 255, 1)',
           borderWidth: 0.5,
-          // areaColor: 'rgba(0, 109, 163, 1)',
-          opacity: 1,
-          areaColor: new echarts.graphic.RadialGradient(0.5, 0.5, 1.5, [
-            {
+          // areaColor: 'rgba(29,85,139,.6)'
+          areaColor: {
+            type: 'linear-gradient',
+            x: 0,
+            y: 600,
+            x2: 0,
+            y2: 0,
+            colorStops: [{
               offset: 0,
-              color: 'rgba(0, 109, 163, 0.8)'
-            },
-            {
-              offset: 0.5,
-              color: 'rgba(0, 109, 163, 0.9)'
-            },
-            {
+              color: 'RGBA(37,108,190,1)' // 0% 处的颜色
+            }, {
               offset: 1,
-              color: 'rgba(0, 117, 172, 1)'
-            }
-          ]),
+              color: 'RGBA(15,169,195,1)' // 50% 处的颜色
+            }],
+            global: true // 缺省为 false
+          },
         },
-        // 鼠标经过
         emphasis: {
           label: {
-            color: "rgba(255,255,255,0.6)",
+            color: '#fff'
           },
           itemStyle: {
-            areaColor: '#15577C',
-          },
-        },
-        select: {
-          label: {
-            color: "rgba(255,255,255,0.6)",
-          },
-          itemStyle: {
-            areaColor: "#15577C",
-            borderWidth: 1,
-            borderColor: "#97A5C2",
-          },
+            areaColor: {
+              type: 'linear-gradient',
+              x: 0,
+              y: 600,
+              x2: 0,
+              y2: 0,
+              colorStops: [{
+                offset: 0,
+                color: 'RGBA(37,108,190,1)' // 0% 处的颜色
+              }, {
+                offset: 1,
+                color: 'RGBA(15,169,195,1)' // 50% 处的颜色
+              }],
+              global: true // 缺省为 false
+            },
+          }
         },
         label: {
           show: true,
@@ -322,13 +334,6 @@ const ecOptions = reactive({
         color: "#fff",
       },
       data: ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5"],
-    },
-    grid: {
-      top: "50",
-      left: "3%",
-      right: "4%",
-      bottom: "3%",
-      containLabel: true,
     },
     xAxis: [
       {
@@ -504,18 +509,24 @@ const ecOptions = reactive({
       trigger: 'axis'
     },
     grid: {
-      top: 60,
-      bottom: 40,
       textStyle: {
         color: "#fff",
       },
     },
     legend: {
-      top: "3%",
+      top: 10,
+      right: 0,
+      itemWidth: 14 ,
+      itemHeight: 14 ,
       textStyle: {
         color: "#fff",
       },
-      data: ["完成", "进行", "延期", '项目总数'],
+      data: [
+        { name: "完成", itemStyle: { color: '#00F1FF' } },
+        { name: "进行", itemStyle: { color: '#0066F5' } },
+        { name: "延期", itemStyle: { color: '#FF1400' } },
+        { name: "项目总数", itemStyle: { color: '#6DD400' } }
+      ],
     },
 
     xAxis: [
@@ -592,11 +603,11 @@ const ecOptions = reactive({
           709, 1917, 2455, 2610
         ],
       },
-
       {
         name: "进行",
         type: "bar",
         stack: "总量",
+        barMaxWidth: 15,
         itemStyle: {
           color: {
               type: 'linear',
@@ -621,6 +632,7 @@ const ecOptions = reactive({
         name: "延期",
         type: "bar",
         stack: "总量",
+        barMaxWidth: 15,
         itemStyle: {
           color: {
               type: 'linear',
@@ -744,7 +756,7 @@ const ecOptions = reactive({
         type: 'pictorialBar',
         barGap: '-100%',
         symbolPosition: 'end',
-        symbolOffset: [0, '-120%'],
+        symbolOffset: [0, '-40px'],
         data: [
           {
             value: 123,
@@ -784,7 +796,8 @@ const ecOptions = reactive({
         ]
       }
     ]
-  }
+  },
+  options5: projectStatusPie
 })
 
 onMounted(() => {
@@ -812,12 +825,22 @@ onUnmounted(() => {
     }
 
     &-center {
-      display: flex;
       width: 50%;
-
+      .center-header {
+        margin: 0 auto;
+        text-align: center;
+        height: 6rem;
+        width: 80%;
+      }
       .map {
         height: 100%;
         width: 100%;
+      }
+      .project-status {
+        display: flex;
+        .echarts {
+          flex: auto;
+        }
       }
     }
 

@@ -8,8 +8,8 @@ const defDesignSize = {
 
 export default {
   designScale: 0,
-  defDesignSize: defDesignSize,
-  screenSize: defDesignSize,
+  defDesignSize: {...defDesignSize},
+  screenSize: {...defDesignSize},
   _setRemUnit() {
     const docEl = document.documentElement
     const rem = this.screenSize.width / 100
@@ -22,7 +22,7 @@ export default {
     const { clientWidth, clientHeight } = docEl
     const { width: designWidth, height: designHeight } = defDesignSize
     const scale = this.designScale = designHeight / designWidth
-    const layoutSize = defDesignSize
+    const layoutSize = { ...defDesignSize }
 
     if (clientWidth * scale > clientHeight) {
       // 计算高度超出  保持高度 计算宽度
@@ -33,24 +33,20 @@ export default {
       layoutSize.height = Math.floor(clientWidth * scale)
       layoutSize.width = Math.floor(clientWidth)
     }
-    console.log(layoutSize);
     this.screenSize = layoutSize
   },
   _windowResize() {
     this._setScreenSize()
     this._setRemUnit()
-
     this._resizeCb && this._resizeCb()
   },
   unregisterCB() {
-    window.removeEventListener("resize", this._resizeCb)
     this._resizeCb = null
   },
   registerCB(cb) {
     this._resizeCb = () => {
       cb && cb()
     }
-    window.addEventListener("resize", this._resizeCb)
   },
   _resizeCb() {},
   init(designSize) {
@@ -61,11 +57,7 @@ export default {
         this.defDesignSize = designSize
       }
     }
-    window.addEventListener("resize", () => {
-      this._setScreenSize()
-      this._setRemUnit()
-    })
-    this._setRemUnit()
-    this._setScreenSize()
+    window.addEventListener("resize", this._windowResize.bind(this))
+    this._windowResize()
   },
 }

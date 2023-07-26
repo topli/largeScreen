@@ -1,8 +1,8 @@
 <template>
   <div class="screen-card">
     <div class="screen-card-header">
-      <i></i>
-      <span>{{ title }}</span>
+      <i class="screen-card-icon"></i>
+      <span class="screen-card-title">{{ title }}</span>
     </div>
     <div class="screen-card-body">
       <slot></slot>
@@ -16,8 +16,10 @@ defineProps(['title'])
 <style scoped lang='scss'>
 .screen-card {
   &-header {
+    display: flex;
+    align-items: center;
     position: relative;
-    padding: 0.6rem 1rem;
+    padding: 0.3rem 0.5rem;
     background-color: rgba(0, 101, 243, 0.2);
     border: 1px solid;
     border-image: linear-gradient(90deg, rgba(63, 179, 216, 1), rgba(63, 179, 216, 0)) 1 1;
@@ -41,6 +43,16 @@ defineProps(['title'])
       height: 2px;
       width: 2rem;
       background-color: #0065F3;
+    }
+    .screen-card-icon {
+      margin-right: 10px;
+      width: 28px;
+      height: 36px;
+      display: inline-block;
+      background: url('~@/assets/images/title_icon.png') 100% 100% no-repeat;
+    }
+    .screen-card-title {
+      margin-top: 2px;
     }
   }
 }

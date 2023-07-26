@@ -22,7 +22,7 @@ const dateObj = reactive({
 })
 
 const formatDate = () => {
-  dateObj.time = dayjs(now.value).format('hh:mm:ss')
+  dateObj.time = dayjs(now.value).format('HH:mm:ss')
   dateObj.date = dayjs(now.value).format('YYYY.MM.DD')
   dateObj.day = '星期' + weekDay[Number(dayjs(now.value).format('d'))]
 }

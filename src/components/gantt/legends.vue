@@ -23,7 +23,7 @@ const props = defineProps(['items', 'modelValue', 'type'])
 const findItem = ref()
 
 if (props.items && props.items.length) {
-  findItem.value = props.items.find(item => item.value === props.modelValue)
+  findItem.value = props.items.find((item: any) => item.value === props.modelValue)
 }
 
 </script>
@@ -41,7 +41,7 @@ if (props.items && props.items.length) {
     display: flex;
     position: relative;
     width: 100%;
-    line-height: 1.5rem;
+    line-height: 20px;
     &-bg {
       position: absolute;
       left: 0;
@@ -57,7 +57,7 @@ if (props.items && props.items.length) {
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      min-width: calc(1.5rem + 16px);
+      min-width: 36px;
     }
     &-text {
       @include ellipsis();

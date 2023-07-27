@@ -203,7 +203,7 @@ const elRef = ref()
 const resize = () => {
   setTimeout(() => {
     const height = elRef.value.clientHeight
-    state.tableHeight = height - (Number(document.documentElement.style.fontSize.replace('px', '')) * 4) - 55 + 'px'
+    state.tableHeight = height - (Number(document.documentElement.style.fontSize.replace('px', '')) * 4) - 35 + 'px'
   });
 }
 onMounted(() => {
@@ -223,6 +223,7 @@ onUnmounted(() => {
       background: transparent;
       border: 1px solid #2276AD;
       th {
+        padding: 8px 16px;
         background: transparent;
         background-image: linear-gradient(0deg, #132D52, #051220);
         color: #fff;
@@ -239,6 +240,7 @@ onUnmounted(() => {
           }
         }
         td {
+          padding: 6px 16px;
           background-color: transparent!important;
           // border: 1px solid #142D46;
           border-top: 1px solid rgba(51, 95, 157, 0.5)!important;

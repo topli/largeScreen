@@ -58,6 +58,7 @@ const ecOptions = reactive({
       display: flex;
       .total-left {
         width: 60%;
+        min-width: 43rem;
         .title {
 
         }

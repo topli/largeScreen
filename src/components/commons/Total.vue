@@ -56,6 +56,7 @@ const props = defineProps(['modelValue'])
       border-bottom: 2px solid rgba(204, 204, 204, 0.4);
       border-left: 0px solid transparent;
       border-right: 0px solid transparent;
+      z-index: -1;
       &::before{
         content: '';
         height: 3rem;

@@ -7,15 +7,28 @@ const defDesignSize = {
 }
 
 export default {
-  designScale: 0,
-  defDesignSize: {...defDesignSize},
-  screenSize: {...defDesignSize},
+  keepScale: false, // 保持设计图大小比例
+  designScale: 0, // 设计图比例
+  defDesignSize: {...defDesignSize}, // 默认大小
+  screenSize: { ...defDesignSize }, // 当前场景大小
+  rem: 19.2,
   _setRemUnit() {
     const docEl = document.documentElement
-    const rem = this.screenSize.width / 100
-    docEl.style.fontSize = rem + "px"
+    if (this.keepScale) {
+      this.rem = this.screenSize.width / 100
+    } else {
+      this.rem = (this.defDesignSize.width / 100) * this.screenSize.height / defDesignSize.height
+    }
+    docEl.style.fontSize = this.rem + "px"
   },
   _setScreenSize() {
+    if (this.keepScale) {
+      this._setKeepScaleScreen()
+    } else {
+      this._setAutoScreen()
+    }
+  },
+  _setKeepScaleScreen() {
     const { defDesignSize } = this
     const docEl = document.documentElement
     // 获取父节点的宽高
@@ -23,7 +36,6 @@ export default {
     const { width: designWidth, height: designHeight } = defDesignSize
     const scale = this.designScale = designHeight / designWidth
     const layoutSize = { ...defDesignSize }
-
     if (clientWidth * scale > clientHeight) {
       // 计算高度超出  保持高度 计算宽度
       layoutSize.height = Math.floor(clientHeight)
@@ -34,6 +46,12 @@ export default {
       layoutSize.width = Math.floor(clientWidth)
     }
     this.screenSize = layoutSize
+  },
+  _setAutoScreen() {
+    this.screenSize = {
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight
+    }
   },
   _windowResize() {
     this._setScreenSize()
@@ -49,7 +67,7 @@ export default {
     }
   },
   _resizeCb() {},
-  init(designSize) {
+  init(designSize, keepScale = false) {
     if (designSize) {
       if (!designSize.height || !designSize.width) {
         console.error('designSize width、height is require');
@@ -57,6 +75,7 @@ export default {
         this.defDesignSize = designSize
       }
     }
+    this.keepScale = keepScale
     window.addEventListener("resize", this._windowResize.bind(this))
     this._windowResize()
   },

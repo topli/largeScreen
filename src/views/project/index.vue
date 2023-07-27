@@ -39,12 +39,12 @@ import Header from "@/components/commons/Header.vue"
 import Echarts from "@/components/echarts/index.vue"
 import ScreenCard from "@/components/commons/ScreenCard.vue"
 import LargeScreenMain from "@/views/largeScreenMain/index.vue"
+import Total from "@/components/commons/Total.vue"
 import { onMounted, onUnmounted, reactive, ref } from "vue"
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 
 import { pathSymbols, projectStatusPie, MAP_LEVEL } from "./constant"
-import Total from "@/components/commons/Total.vue"
 
 const mapRef = ref()
 const mapState = reactive<{

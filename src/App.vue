@@ -1,9 +1,11 @@
 <template>
-  <Project></Project>
+  <!-- <Project></Project> -->
+  <ProjectGantt></ProjectGantt>
 </template>
 
 <script setup lang="ts">
-import Project from '@/views/project/index.vue'
+// import Project from '@/views/project/index.vue'
+import ProjectGantt from '@/views/projectGantt/index.vue'
 
 </script>
 

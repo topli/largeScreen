@@ -2,3 +2,11 @@
   width: $w;
   height: $h;
 }
+
+@mixin ellipsis($line: 1) {
+  overflow: hidden; //超出的文本隐藏
+  text-overflow: ellipsis; //溢出用省略号显示
+  white-space: nowrap;  // 默认不换行；
+  -webkit-line-clamp: $line; // 超出多少行
+  -webkit-box-orient: vertical;
+}

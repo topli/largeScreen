@@ -27,7 +27,7 @@ const clear = () => {
 }
 
 const setOption = (val: any) => {
-  ecIns?.setOption(val, true)
+  val && ecIns?.setOption(val, true)
 }
 
 onMounted(() => {

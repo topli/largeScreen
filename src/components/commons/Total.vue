@@ -19,10 +19,10 @@ const props = defineProps(['modelValue'])
 <style scoped lang='scss'>
 .total-container {
   position: relative;
-  display: flex;
   padding: 0 2rem;
+  display: inline-flex;
   .total-item {
-    flex: auto;
+    display: inline-block;
     padding: 0 0.6rem;
     &-header {
       font-size: 0.8rem;

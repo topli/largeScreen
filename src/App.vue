@@ -1,13 +1,13 @@
 <template>
-  <!-- <Project></Project> -->
-  <!-- <ProjectGantt></ProjectGantt> -->
-  <DeptGantt></DeptGantt>
+  <projectOverview></projectOverview>
+  <!-- <projectBoard></projectBoard> -->
+  <!-- <deptBoard></deptBoard> -->
 </template>
 
 <script setup lang="ts">
-// import Project from '@/views/project/index.vue'
-// import ProjectGantt from '@/views/projectGantt/index.vue'
-import DeptGantt from '@/views/deptGantt/index.vue'
+import projectOverview from '@/views/projectOverview/index.vue'
+// import projectBoard from '@/views/projectBoard/index.vue'
+// import deptBoard from '@/views/deptBoard/index.vue'
 
 </script>
 

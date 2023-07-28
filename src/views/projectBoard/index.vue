@@ -22,13 +22,13 @@
 
 <script setup lang='ts'>
 import { reactive } from "vue";
-import LargeScreenMain from "@/views/largeScreenMain/index.vue";
+import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
 import Total from "@/components/commons/Total.vue";
 import Echarts from "@/components/echarts/index.vue";
 
 import Gantt from '@/components/gantt/index.vue';
-import { projectStatusPie } from "../project/constant";
+import { projectStatusPie } from "@/constants/ecOptions";
 const testData = [
   { label: '当前区域', value: '全国' },
   { label: '区域项目总数', value: '554', unit: '单位'},
@@ -41,7 +41,7 @@ const testData = [
 
 
 const ecOptions = reactive({
-  options5: projectStatusPie
+  options5: projectStatusPie()
 })
 </script>
 <style scoped lang='scss'>
@@ -56,13 +56,7 @@ const ecOptions = reactive({
     flex-direction: column;
     .project-gantt-top {
       display: flex;
-      .total-left {
-        width: 60%;
-        min-width: 43rem;
-        .title {
-
-        }
-      }
+      .total-left {}
       .project-status {
         width: 40%;
         display: flex;

@@ -7,9 +7,18 @@
         <Total v-model="testData"></Total>
       </div>
       <div class="project-status">
-        <Echarts style="height: 8rem" :options="ecOptions.options5"></Echarts>
-        <Echarts style="height: 8rem" :options="ecOptions.options5"></Echarts>
-        <Echarts style="height: 8rem" :options="ecOptions.options5"></Echarts>
+        <div class="project-status-title">
+          <span>当前项目</span>
+          <span>总数状态分布</span>
+        </div>
+        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
+        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
+        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
+        <div class="project-status-title">
+          <span>科室项目</span>
+          <span>组别分布</span>
+        </div>
+        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
       </div>
       <ScreenCard title="科室项目分布">
         <Echarts style="height: 10rem" :options="ecOptions.options1"></Echarts>
@@ -23,14 +32,14 @@
 
 <script setup lang='ts'>
 import { reactive } from "vue";
-import LargeScreenMain from "@/views/largeScreenMain/index.vue";
+import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
 import Total from "@/components/commons/Total.vue";
 import Echarts from "@/components/echarts/index.vue";
 import ScreenCard from "@/components/commons/ScreenCard.vue"
 
 import Gantt from '@/components/gantt/index.vue';
-import { projectStatusPie } from "../project/constant";
+import { projectStatusPie } from "@/constants/ecOptions";
 const testData = [
   { label: '当前区域', value: '全国' },
   { label: '当前组别', value: '554'},
@@ -49,6 +58,10 @@ const ecOptions = reactive({
       trigger: 'axis'
     },
     grid: {
+      left: 60,
+      right: 40,
+      bottom: 40,
+      top: 40,
       textStyle: {
         color: "#fff",
       },
@@ -89,7 +102,7 @@ const ecOptions = reactive({
         axisLabel: {
           interval: 0,
         },
-        data: ['华北', '华东', '西北', '西南','华北', '华东', '西北', '西南'],
+        data: ['姓名1', '姓名2', '姓名3', '姓名4', '姓名5', '姓名6', '姓名7', '姓名8', '姓名9', '姓名10', '姓名11', '姓名12', '姓名13'],
       },
     ],
     yAxis: [
@@ -140,7 +153,7 @@ const ecOptions = reactive({
           barBorderRadius: 15,
         },
         data: [
-          709, 1917, 2455, 2610, 709, 1917, 2455, 2610
+          709, 1917, 2455, 2610, 709, 1917, 2455, 2610, 709, 1917, 2455, 2610, 465
         ],
       },
       {
@@ -166,7 +179,7 @@ const ecOptions = reactive({
           },
           barBorderRadius: 15,
         },
-        data: [327, 1776, 507, 1200, 327, 1776, 507, 1200],
+        data: [327, 1776, 507, 1200, 327, 1776, 507, 1200, 709, 1917, 2455, 2610, 512],
       },
       {
         name: "延期",
@@ -197,7 +210,7 @@ const ecOptions = reactive({
         name: "项目总数",
         type: "line",
         data: [
-          1036, 3693, 2962, 3810, 1036, 3693, 2962, 3810
+          1036, 3693, 2962, 3810, 1036, 3693, 2962, 3810, 1036, 3693, 2962, 3810, 655
         ],
         smooth: true,
         lineStyle: {
@@ -206,7 +219,7 @@ const ecOptions = reactive({
       },
     ],
   },
-  options5: projectStatusPie
+  options5: projectStatusPie()
 })
 </script>
 <style scoped lang='scss'>
@@ -220,16 +233,35 @@ const ecOptions = reactive({
     display: flex;
     flex-direction: column;
     .dept-gantt-total {
-      display: flex;
-      flex-direction: column;
-      width: 60%;
       .gantt {
         flex: 1;
       }
     }
     .project-status {
-      width: 40%;
+      padding: 1rem;
       display: flex;
+      > .echarts {
+        display: inline-block;
+      }
+      &-title {
+        margin: 0 1rem;
+        font-size: 0.5rem;
+        display: inline-flex;
+        background: url('~@/assets/images/title_bg.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 1.8rem;
+        height: 8.8rem;
+        min-width: 29px;
+        min-height: 162px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 2px;
+        span {
+          flex: 1;
+          text-align: center;
+        }
+      }
     }
     :deep(.screen-card) {
       .screen-card-header {

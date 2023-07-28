@@ -1,123 +1,143 @@
-<template>
-  <LargeScreenMain class="project-screen">
-    <Header title="项目统计大屏"></Header>
-    <div class="project-body">
-      <div class="project-body-left">
-        <ScreenCard title="科室项目分布">
-          <Echarts style="height: 23rem" :options="ecOptions.options1"></Echarts>
-        </ScreenCard>
-        <ScreenCard title="项目进展分析">
-          <Echarts style="height: 23rem" :options="ecOptions.options2"></Echarts>
-        </ScreenCard>
-      </div>
-      <div class="project-body-center">
-        <div class="center-header">
-          <div class="title">项目区域分布</div>
-          <Total v-model="testData"></Total>
-        </div>
-        <div style="height: 35rem" class="map" ref="mapRef" id="map"></div>
-        <div class="project-status">
-          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
-          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
-          <Echarts style="height: 10rem" :options="ecOptions.options5"></Echarts>
-        </div>
-      </div>
-      <div class="project-body-right">
-        <ScreenCard title="大区统计">
-          <Echarts style="height: 23rem" :options="ecOptions.options3"></Echarts>
-        </ScreenCard>
-        <ScreenCard title="领域分布">
-          <Echarts style="height: 23rem" :options="ecOptions.options4"></Echarts>
-        </ScreenCard>
-      </div>
-    </div>
-  </LargeScreenMain>
-</template>
+import * as echarts from 'echarts'
 
-<script setup lang="ts">
-import Header from "@/components/commons/Header.vue"
-import Echarts from "@/components/echarts/index.vue"
-import ScreenCard from "@/components/commons/ScreenCard.vue"
-import LargeScreenMain from "@/views/largeScreenMain/index.vue"
-import Total from "@/components/commons/Total.vue"
-import { onMounted, onUnmounted, reactive, ref } from "vue"
-import * as echarts from "echarts"
-import chinaData from "@/assets/geo/china.json"
-
-import { pathSymbols, projectStatusPie, MAP_LEVEL } from "./constant"
-
-const mapRef = ref()
-const mapState = reactive<{
-  ins?: echarts.EChartsType
-  level?: MAP_LEVEL
-  mapData?: any
-}>({})
-
-mapState.level = MAP_LEVEL.COUNTRY
-
-const initMap = () => {
-  if (mapRef.value) {
-    // 初始化实例
-    mapState.ins = echarts.init(mapRef.value)
-    // 注册地图
-    echarts.registerMap("china", chinaData as any)
-    mapState.mapData = chinaData
-    console.log(chinaData);
-    
-    // 绘制地图
-    renderMap("china", [])
-    // 绑定点击事件
-    mapState.ins && mapState.ins.on("click", selectProvinces)
-    // 解决第一次渲染 宽高问题
-    setTimeout(() => {
-      resize()
-    }, 200)
-  }
+export const pathSymbols = {
+  plane: require("@/assets/images/plane.png"),
+  missile: require("@/assets/images/missile.png"),
+  train: require("@/assets/images/train.png"),
+  ship: require("@/assets/images/ship.png"),
+  car: require("@/assets/images/car.png"),
+  satellite: require("@/assets/images/satellite.png"),
+  radar: require("@/assets/images/radar.png"),
 }
+export const projectStatusPie = function () {
+  return {
+    tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)",
 
-const testData = [
-  { label: '区域项目总数', value: '554', unit: '单位'},
-  { label: '区域在研项目数', value: '541', unit: '单位'},
-  { label: '在研产品数', value: '897', unit: '单位'},
-  { label: '区域客户数', value: '771', unit: '单位'},
-  { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-  { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
-]
-
-const resize = () => {
-  mapState.ins?.resize()
+    },
+    grid: {
+      left: 0
+    },
+    title: {
+        text: '在研项目\n紧急度\n分布',
+        left: 'center',
+        top: '30%',
+        padding: [24, 0],
+        textStyle: {
+          color: '#fff',
+          fontSize: 12,
+          align: 'center',
+          width: 60
+        }
+    },
+    legend: {
+      orient: 'vertical',
+      right: 0,
+      top: 'center',
+      itemWidth: 12,
+      itemHeight: 12,
+      textStyle: {
+        color: '#fff'
+      },
+      data: ['特紧急', '三级', '二级', '一级']
+    },
+    series: [
+      {
+            name: '人员类型',
+            type: 'pie',
+            hoverAnimation: false,
+            legendHoverLink: false,
+            radius: ['40%', '50%'],
+            label: {
+              show: false,
+            },
+            labelLine: {
+              normal: {
+                  show: false
+              },
+            },
+            tooltip: {
+              show: false,
+            },
+            data: [
+              {
+                value: 100,
+                itemStyle: {
+                  color: '#BC9A48'
+                }
+              },
+              {
+                  value: 100,
+                  itemStyle: {
+                    color: '#4A9400'
+                  }
+              },
+              {
+                  value: 100,
+                  itemStyle: {
+                    color: '#1DD2D8'
+                  }
+              },
+              {
+                  value: 100,
+                  itemStyle: {
+                    color: '#3D55E8'
+                  }
+              }
+            ]
+        },
+        {
+            name: '人员类型',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            labelLine: {
+              show: false,
+            },
+            label: {
+              show:false
+            },
+            data: [
+              {
+                    value: 100,
+                    name: '特紧急',
+                    itemStyle: {
+                      color: '#F7B500'
+                    }
+                },
+                {
+                    value: 100,
+                    name: '三级',
+                    itemStyle: {
+                      color: '#5DB703'
+                    }
+                },
+                {
+                    value: 100,
+                    name: '二级',
+                    itemStyle: {
+                      color: '#00FAD4'
+                    }
+                },
+                {
+                    value: 100,
+                    name: '一级',
+                    itemStyle: {
+                      color: '#4E8AFA'
+                    }
+                }
+            ]
+        }
+    ]
 }
-
-const selectProvinces = (params: any) => {
-  const isCountry = mapState.level === MAP_LEVEL.COUNTRY
-  // const isProvince = mapState.level === MAP_LEVEL.PROVINCE
-  const isCity = mapState.level === MAP_LEVEL.CITY
-  if (isCity) return
-  const find = mapState.mapData.features.find(
-    (item: any) => item.properties.name === params.name
-  )
-
-  if (find) {
-    const folder = isCountry ? "province" : "city"
-    import(`@/assets/geo/${folder}/${find.properties.id}`).then((res) => {
-      mapState.mapData = res.default
-      echarts.registerMap(find.properties.name, res.default as any)
-      renderMap(find.properties.name, [])
-      mapState.level = isCountry ? MAP_LEVEL.PROVINCE : MAP_LEVEL.CITY
-      setTimeout(() => {
-        resize()
-      }, 200)
-    })
-  }
 }
-
-const renderMap = (map: string, data: any) => {
-  let option = {}
-  option = {
+// 项目区域分布 地图配置
+export const projectMapOptions = function () {
+  return {
     // 地理坐标系组件
     geo: {
       type: 'map',
-      map: map,
+      map: '',
       top: 10,
       bottom: 10,
       itemStyle: {
@@ -143,21 +163,41 @@ const renderMap = (map: string, data: any) => {
     roam: false, // 禁用缩放
     animationEasing: "cubicOut",
     animationDurationUpdate: 400,
-    series: [
-      {
-        type: "map",
-        name: "china",
-        map: map,
-        tooltip: {
-          show: true,
+    series: {
+      type: "map",
+      name: "china",
+      map: '',
+      tooltip: {
+        show: true,
+      },
+      top: 10,
+      bottom: 10,
+      data: [],
+      itemStyle: {
+        borderColor: 'rgba(111, 253, 255, 1)',
+        borderWidth: 0.5,
+        // areaColor: 'rgba(29,85,139,.6)'
+        areaColor: {
+          type: 'linear-gradient',
+          x: 0,
+          y: 600,
+          x2: 0,
+          y2: 0,
+          colorStops: [{
+            offset: 0,
+            color: 'RGBA(37,108,190,1)' // 0% 处的颜色
+          }, {
+            offset: 1,
+            color: 'RGBA(15,169,195,1)' // 50% 处的颜色
+          }],
+          global: true // 缺省为 false
         },
-        top: 10,
-        bottom: 10,
-        data: data,
+      },
+      emphasis: {
+        label: {
+          color: '#fff'
+        },
         itemStyle: {
-          borderColor: 'rgba(111, 253, 255, 1)',
-          borderWidth: 0.5,
-          // areaColor: 'rgba(29,85,139,.6)'
           areaColor: {
             type: 'linear-gradient',
             x: 0,
@@ -173,67 +213,25 @@ const renderMap = (map: string, data: any) => {
             }],
             global: true // 缺省为 false
           },
-        },
-        emphasis: {
-          label: {
-            color: '#fff'
-          },
-          itemStyle: {
-            areaColor: {
-              type: 'linear-gradient',
-              x: 0,
-              y: 600,
-              x2: 0,
-              y2: 0,
-              colorStops: [{
-                offset: 0,
-                color: 'RGBA(37,108,190,1)' // 0% 处的颜色
-              }, {
-                offset: 1,
-                color: 'RGBA(15,169,195,1)' // 50% 处的颜色
-              }],
-              global: true // 缺省为 false
-            },
-          }
-        },
-        label: {
-          show: true,
-          color: "rgba(255, 255, 255, 0.6)",
-          fontSize: 13,
-        },
+        }
       },
-    ]
-  }
-  if (mapState.ins) {
-    mapState.ins.setOption(option)
+      label: {
+        show: true,
+        color: "rgba(255, 255, 255, 0.6)",
+        fontSize: 13,
+      },
+    },
   }
 }
-
-const linearGradient1 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-              {
-                offset: 0,
-                color: 'rgba(0,241,255,0)'
-              },
-              {
-                offset: 1,
-                color: '#00F1FF'
-              }
-])
-
-const linearGradient2 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-              {
-                offset: 0,
-                color: 'rgba(109,212,0,0)'
-              },
-              {
-                offset: 1,
-                color: '#6DD400'
-              }
-            ])
-
-const ecOptions = reactive({
-  options1: {
-    tooltip: {},
+// 科室项目分布
+export const deptProjectOptions = function () {
+  return {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
     angleAxis: {
       axisTick: {
         alignWithLabel: true,
@@ -277,7 +275,7 @@ const ecOptions = reactive({
       },
     },
     polar: {
-      center:['50%','50%'],//上下距离
+      center: ['50%', '50%'],//上下距离
       radius: [0, '70%']//大小
     },
     series: [
@@ -287,9 +285,9 @@ const ecOptions = reactive({
         coordinateSystem: "polar",
         name: "故障",
         stack: "a",
-        emphasis: {
-          focus: "series",
-        },
+        // emphasis: {
+        //   focus: "series",
+        // },
         itemStyle: {
           color: "rgba(255,20,0,0.6)",
         },
@@ -300,9 +298,9 @@ const ecOptions = reactive({
         coordinateSystem: "polar",
         name: "正常",
         stack: "a",
-        emphasis: {
-          focus: "series",
-        },
+        // emphasis: {
+        //   focus: "series",
+        // },
         itemStyle: {
           color: "rgba(0,101,243,0.6)",
         },
@@ -315,8 +313,11 @@ const ecOptions = reactive({
       top: 10,
       right: 0,
     },
-  },
-  options2: {
+  }
+}
+// 项目进展分析
+export const projectProgressOptions = function () {
+  return {
     color: ["#6DD400", "#15D895", "#12F2FF", "#0065F3", "#8000F3", '#96C0FC', '#E8B429'],
     tooltip: {
       trigger: "axis",
@@ -503,8 +504,11 @@ const ecOptions = reactive({
         data: [220, 302, 181, 234, 210, 290, 150],
       },
     ],
-  },
-  options3: {
+  }
+}
+// 大区统计
+export const areaStatisticsOptions = function () {
+  return {
     tooltip: {
       trigger: 'axis'
     },
@@ -516,8 +520,8 @@ const ecOptions = reactive({
     legend: {
       top: 10,
       right: 0,
-      itemWidth: 14 ,
-      itemHeight: 14 ,
+      itemWidth: 14,
+      itemHeight: 14,
       textStyle: {
         color: "#fff",
       },
@@ -583,19 +587,19 @@ const ecOptions = reactive({
         barGap: "10%",
         itemStyle: {
           color: {
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [{
-                  offset: 0,
-                  color: '#00F1FF' // 0% 处的颜色
-              }, {
-                  offset: 1,
-                  color: 'rgba(0,241,255,0)' // 100% 处的颜色
-              }],
-              globalCoord: false // 缺省为 false
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+              offset: 0,
+              color: '#00F1FF' // 0% 处的颜色
+            }, {
+              offset: 1,
+              color: 'rgba(0,241,255,0)' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
           },
           barBorderRadius: 15,
         },
@@ -610,19 +614,19 @@ const ecOptions = reactive({
         barMaxWidth: 15,
         itemStyle: {
           color: {
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [{
-                  offset: 0,
-                  color: '#0066F5' // 0% 处的颜色
-              }, {
-                  offset: 1,
-                  color: 'rgba(0,102,245,0)' // 100% 处的颜色
-              }],
-              globalCoord: false // 缺省为 false
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+              offset: 0,
+              color: '#0066F5' // 0% 处的颜色
+            }, {
+              offset: 1,
+              color: 'rgba(0,102,245,0)' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
           },
           barBorderRadius: 15,
         },
@@ -635,19 +639,19 @@ const ecOptions = reactive({
         barMaxWidth: 15,
         itemStyle: {
           color: {
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [{
-                  offset: 0,
-                  color: '#FF1400' // 0% 处的颜色
-              }, {
-                  offset: 1,
-                  color: 'rgba(255,0,0,0)' // 100% 处的颜色
-              }],
-              globalCoord: false // 缺省为 false
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+              offset: 0,
+              color: '#FF1400' // 0% 处的颜色
+            }, {
+              offset: 1,
+              color: 'rgba(255,0,0,0)' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
           },
           barBorderRadius: 15,
         },
@@ -665,8 +669,32 @@ const ecOptions = reactive({
         }
       },
     ],
+  }
+}
+const linearGradient1 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+  {
+    offset: 0,
+    color: 'rgba(0,241,255,0)'
   },
-  options4: {
+  {
+    offset: 1,
+    color: '#00F1FF'
+  }
+])
+
+const linearGradient2 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+  {
+    offset: 0,
+    color: 'rgba(109,212,0,0)'
+  },
+  {
+    offset: 1,
+    color: '#6DD400'
+  }
+])
+// 领域分析
+export const domainAnalysisOptions = function () {
+  return {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -724,25 +752,25 @@ const ecOptions = reactive({
             itemStyle: {
               color: linearGradient1
             }
-          }, 
+          },
           {
             value: 18,
             itemStyle: {
               color: linearGradient2
             }
-          }, 
+          },
           {
             value: 20,
             itemStyle: {
               color: linearGradient1
             }
-          }, 
+          },
           {
             value: 9,
             itemStyle: {
               color: linearGradient2
             }
-          }, 
+          },
           {
             value: 2,
             itemStyle: {
@@ -796,58 +824,5 @@ const ecOptions = reactive({
         ]
       }
     ]
-  },
-  options5: projectStatusPie
-})
-
-onMounted(() => {
-  initMap()
-  window.addEventListener("resize", resize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener("resize", resize)
-})
-</script>
-<style scoped lang="scss">
-.project-screen {
-  color: #ffffff;
-  font-family: YouSheBiaoTiHei;
-  background: url('~@/assets/images/project_bg.png') 100% 100% no-repeat;
-  background-position: center;
-  .project-body {
-    width: 100%;
-    display: flex;
-
-    &-left {
-      padding: 20px;
-      width: 25%;
-    }
-
-    &-center {
-      width: 50%;
-      .center-header {
-        margin: 0 auto;
-        text-align: center;
-        height: 6rem;
-        width: 80%;
-      }
-      .map {
-        height: 100%;
-        width: 100%;
-      }
-      .project-status {
-        display: flex;
-        .echarts {
-          flex: auto;
-        }
-      }
-    }
-
-    &-right {
-      padding: 20px;
-      width: 25%;
-    }
   }
 }
-</style>

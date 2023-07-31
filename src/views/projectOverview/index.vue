@@ -16,7 +16,7 @@
           <Total v-model="testData">
             <div class="to-detail">
               <a-tooltip title="查看详情">
-                <img src="~@/assets/images/to_detail.png">
+                <img src="~@/assets/images/to_detail.png" @click="toDetail">
               </a-tooltip>
             </div>
           </Total>
@@ -54,11 +54,15 @@ import ScreenCard from "@/components/commons/ScreenCard.vue"
 import LargeScreenMain from "@/components/largeScreenMain/index.vue"
 import Total from "@/components/commons/Total.vue"
 import { onMounted, onUnmounted, reactive, ref } from "vue"
+import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL } from '@/constants/project'
-import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
+import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
+
+const routerIns = useRouter()
+
 
 const mapRef = ref()
 const mapState = reactive<{
@@ -176,25 +180,10 @@ const ecOptions = reactive({
   projectStatusPie2: projectStatusPie(),
   projectStatusPie3: projectStatusPie()
 })
-
-const pie1Config = [
-  { name: '在研', color: '#4E66FA', innerColor: '#3D55E8' },
-  { name: '挂起', color: '#DF4949', innerColor: '#C94040' },
-  { name: '终止', color: '#46F9FF', innerColor: '#1DD2D8' },
-  { name: '已完成', color: '#6DD400', innerColor: '#4A9400' }
-]
-
-const pie2Config = [
-  { name: '特紧急', color: '#FFD264', innerColor: '#BC9A48' },
-  { name: '三级', color: '#6DD400', innerColor: '#4A9400' },
-  { name: '二级', color: '#46F9FF', innerColor: '#1DD2D8' },
-  { name: '一级', color: '#4E66FA', innerColor: '#3D55E8' }
-]
-const pie3Config = [
-  { name: '正常', color: '#4E66FA', innerColor: '#3D55E8' },
-  { name: '预警', color: '#FFD264', innerColor: '#BC9A48' },
-  { name: '延期', color: '#DF4949', innerColor: '#C94040' },
-]
+const toDetail = () => {
+  console.log(mapState);
+  routerIns.push('/projectBoard')
+}
 
 
 onMounted(() => {

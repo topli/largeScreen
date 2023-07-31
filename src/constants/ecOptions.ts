@@ -849,3 +849,24 @@ export const domainAnalysisOptions = function () {
     ]
   }
 }
+
+
+
+export const pie1Config = [
+  { name: '在研', color: '#4E66FA', innerColor: '#3D55E8' },
+  { name: '挂起', color: '#DF4949', innerColor: '#C94040' },
+  { name: '终止', color: '#46F9FF', innerColor: '#1DD2D8' },
+  { name: '已完成', color: '#6DD400', innerColor: '#4A9400' }
+]
+
+export const pie2Config = [
+  { name: '特紧急', color: '#FFD264', innerColor: '#BC9A48' },
+  { name: '三级', color: '#6DD400', innerColor: '#4A9400' },
+  { name: '二级', color: '#46F9FF', innerColor: '#1DD2D8' },
+  { name: '一级', color: '#4E66FA', innerColor: '#3D55E8' }
+]
+export const pie3Config = [
+  { name: '正常', color: '#4E66FA', innerColor: '#3D55E8' },
+  { name: '预警', color: '#FFD264', innerColor: '#BC9A48' },
+  { name: '延期', color: '#DF4949', innerColor: '#C94040' },
+]

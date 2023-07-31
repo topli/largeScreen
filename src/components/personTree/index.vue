@@ -1,15 +1,14 @@
 <template>
   <div class="person-tree-wrapper">
     <a-tree
-      :show-line="showLine"
       :show-icon="showIcon"
+      :selectable="false"
       :default-expanded-keys="['0-0-0']"
       :tree-data="treeData"
       @select="onSelect"
     >
-      <template #icon><carry-out-outlined /></template>
-      <template #title="{ dataRef }">
-        <Node v-bind="dataRef"></Node>
+      <template #title="{ dataRef, expanded }">
+        <Node v-bind="dataRef" :expanded="expanded"></Node>
       </template>
     </a-tree>
   </div>
@@ -17,15 +16,13 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue';
-import { CarryOutOutlined } from '@ant-design/icons-vue';
 import type { TreeProps } from 'ant-design-vue';
 
 import Node from './node.vue'
-const showLine = ref<boolean>(true);
 const showIcon = ref<boolean>(false);
 const treeData = ref<TreeProps['treeData']>([
   {
-    title: 'parent 1',
+    title: '功能芯片室',
     key: '0-0',
     persons: [
       { name: '张三1'},
@@ -44,11 +41,7 @@ const treeData = ref<TreeProps['treeData']>([
           { name: '赵六1-1'}
         ],
         children: [
-          { title: 'leaf', key: '0-0-0-0' },
-          {
-            key: '0-0-0-1',
-          },
-          { title: 'leaf', key: '0-0-0-2' },
+          { title: 'leaf', key: '0-0-0-0' }
         ],
       },
       {
@@ -97,8 +90,22 @@ const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
 <style scoped lang='scss'>
 .person-tree-wrapper {
   :deep(.ant-tree) {
-    color: #fff;
+    color: #C8D3D8;
     background-color: transparent;
+    .ant-tree-treenode {
+      .ant-tree-switcher {
+        .anticon {
+          vertical-align: -1.25em;
+          svg {
+            font-size: 1rem;
+            color: #4DBBE4;
+            path:last-child {
+              color: #0D4A61;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

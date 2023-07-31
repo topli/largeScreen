@@ -15,7 +15,7 @@
 import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
 import Total from "@/components/commons/Total.vue";
-import PersonTree from "@/components/personTree";
+import PersonTree from "@/components/personTree/index.vue";
 
 const testData = [
   { label: '当前区域', value: '全国' },

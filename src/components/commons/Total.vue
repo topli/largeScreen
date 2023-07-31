@@ -10,6 +10,7 @@
         <span class="item-unit" v-if="item.unit">{{ item.unit }}</span>
       </div>
     </div>
+    <slot></slot>
   </div>
 </template>
 

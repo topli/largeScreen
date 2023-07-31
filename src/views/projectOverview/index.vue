@@ -11,11 +11,24 @@
         </ScreenCard>
       </div>
       <div class="project-body-center">
+        <div class="top-title">项目区域分布</div>
         <div class="center-header">
-          <div class="title">项目区域分布</div>
-          <Total v-model="testData"></Total>
+          <Total v-model="testData">
+            <div class="to-detail">
+              <a-tooltip title="查看详情">
+                <img src="~@/assets/images/to_detail.png">
+              </a-tooltip>
+            </div>
+          </Total>
         </div>
-        <div style="height: 35rem" class="map" ref="mapRef" id="map"></div>
+        <div style="height: 35rem" class="map-wrapper">
+          <div ref="mapRef" id="map" class="map"></div>
+          <div class="back-map" v-if="mapState.level !== MAP_LEVEL.COUNTRY">
+            <a-tooltip title="返回">
+              <img src="~@/assets/images/back_map.png" @click="backMap">
+            </a-tooltip>
+          </div>
+        </div>
         <div class="project-status">
           <Echarts style="height: 10rem" :options="ecOptions.projectStatusPie1"></Echarts>
           <Echarts style="height: 10rem" :options="ecOptions.projectStatusPie2"></Echarts>
@@ -63,12 +76,12 @@ const initMap = () => {
     // 注册地图
     echarts.registerMap("china", chinaData as any)
     mapState.mapData = chinaData
-    console.log(chinaData);
-    
     // 绘制地图
-    renderMap("china", [])
+    renderMap("china", [{name:'新疆', value: {test1: 3,test2:1}}])
+    areaPaths = []
+    areaPaths[0] = {properties:{ name: 'china' }, mapData: chinaData}
     // 绑定点击事件
-    mapState.ins && mapState.ins.on("click", selectProvinces)
+    mapState.ins && mapState.ins.on("click", selectArea)
     // 解决第一次渲染 宽高问题
     setTimeout(() => {
       resize()
@@ -89,11 +102,16 @@ const resize = () => {
   mapState.ins?.resize()
 }
 
-const selectProvinces = (params: any) => {
+let areaPaths: any = []
+
+const selectArea = (params: any) => {
+  // 判断当前区域等级
   const isCountry = mapState.level === MAP_LEVEL.COUNTRY
   // const isProvince = mapState.level === MAP_LEVEL.PROVINCE
   const isCity = mapState.level === MAP_LEVEL.CITY
+  // 当前区域是城市不往下查询区域
   if (isCity) return
+  // 查找当前点击区域的数据
   const find = mapState.mapData.features.find(
     (item: any) => item.properties.name === params.name
   )
@@ -101,15 +119,36 @@ const selectProvinces = (params: any) => {
   if (find) {
     const folder = isCountry ? "province" : "city"
     import(`@/assets/geo/${folder}/${find.properties.id}`).then((res) => {
-      mapState.mapData = res.default
-      echarts.registerMap(find.properties.name, res.default as any)
-      renderMap(find.properties.name, [])
+      setArea(find.properties, res.default)
       mapState.level = isCountry ? MAP_LEVEL.PROVINCE : MAP_LEVEL.CITY
-      setTimeout(() => {
-        resize()
-      }, 200)
+      areaPaths.push({properties: { ...find.properties }, mapData: res.default })
     })
+
   }
+}
+
+const setArea = (properties: any, mapData: any) => {
+  mapState.mapData = mapData
+  echarts.registerMap(properties.name, mapData as any)
+  renderMap(properties.name, [])
+  setTimeout(() => {
+    resize()
+  }, 200)
+}
+
+const backMap = () => {
+  areaPaths.pop()
+  if (areaPaths.length > 1) {
+    const data = areaPaths[areaPaths.length - 1]
+    setArea(data.properties, data.mapData)
+    if (mapState.level === MAP_LEVEL.CITY) {
+      mapState.level = MAP_LEVEL.PROVINCE
+    }
+  } else {
+    mapState.level = MAP_LEVEL.COUNTRY
+    initMap()
+  }
+
 }
 
 const renderMap = (map: string, data: any) => {
@@ -117,6 +156,12 @@ const renderMap = (map: string, data: any) => {
   option.series.data = data
   option.series.map = map
   option.geo.map = map
+
+  option.tooltip.formatter = (params: any) => {
+    const {name, data} = params
+    return `${name}<br>项目数: ${data?.test1 || ''}<br>产品数：${data?.test2 || ''}`
+  }
+
   if (mapState.ins) {
     mapState.ins.setOption(option)
   }
@@ -181,15 +226,46 @@ onUnmounted(() => {
 
     &-center {
       width: 50%;
-      .center-header {
-        margin: 0 auto;
+      .top-title {
+        padding: 0.6rem 0 0.2rem 0;
         text-align: center;
-        height: 7rem;
-        padding-top: 1rem;
       }
-      .map {
+      .center-header {
+        position: relative;
+        display: flex;
+        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+        .to-detail {
+          display: flex;
+          align-items: flex-end;
+          padding: 0.8rem 0;
+          img {
+            cursor: pointer;
+          }
+        }
+      }
+      .map-wrapper {
+        position: relative;
         height: 100%;
         width: 100%;
+        .map {
+          height: 100%;
+          width: 100%;
+        }
+        .back-map {
+          position: absolute;
+          right: 1rem;
+          top: 0;
+          width: 1.5rem;
+          height: 1.5rem;
+          cursor: pointer;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       .project-status {
         display: flex;

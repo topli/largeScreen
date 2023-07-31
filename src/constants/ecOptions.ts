@@ -134,6 +134,7 @@ export const projectStatusPie = function () {
 // 项目区域分布 地图配置
 export const projectMapOptions = function () {
   return {
+    tooltip: {},
     // 地理坐标系组件
     geo: {
       type: 'map',
@@ -194,6 +195,28 @@ export const projectMapOptions = function () {
         },
       },
       emphasis: {
+        label: {
+          color: '#fff'
+        },
+        itemStyle: {
+          areaColor: {
+            type: 'linear-gradient',
+            x: 0,
+            y: 600,
+            x2: 0,
+            y2: 0,
+            colorStops: [{
+              offset: 0,
+              color: 'RGBA(37,108,190,1)' // 0% 处的颜色
+            }, {
+              offset: 1,
+              color: 'RGBA(15,169,195,1)' // 50% 处的颜色
+            }],
+            global: true // 缺省为 false
+          },
+        }
+      },
+      select: {
         label: {
           color: '#fff'
         },

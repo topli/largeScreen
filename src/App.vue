@@ -1,15 +1,8 @@
 <template>
-  <!-- <ProjectOverview></ProjectOverview> -->
-  <!-- <ProjectBoard></ProjectBoard> -->
-  <!-- <DeptBoard></DeptBoard> -->
-  <DeptDetail></DeptDetail>
+  <RouterView></RouterView>
 </template>
 
 <script setup lang="ts">
-// import ProjectOverview from '@/views/projectOverview/index.vue'
-// import ProjectBoard from '@/views/projectBoard/index.vue'
-// import DeptBoard from '@/views/deptBoard/index.vue'
-import DeptDetail from '@/views/deptDetail/index.vue'
 
 </script>
 

@@ -1,7 +1,9 @@
+export interface DesignSize { height: number, width: number }
+
 /**
  * 大屏适配类
  */
-const defDesignSize = {
+const defDesignSize: DesignSize = {
   width: 1920,
   height: 1080,
 }
@@ -9,7 +11,7 @@ const defDesignSize = {
 export default {
   keepScale: false, // 保持设计图大小比例
   designScale: 0, // 设计图比例
-  defDesignSize: {...defDesignSize}, // 默认大小
+  defDesignSize: {...defDesignSize }, // 默认大小
   screenSize: { ...defDesignSize }, // 当前场景大小
   rem: 19.2,
   _setRemUnit() {
@@ -59,15 +61,15 @@ export default {
     this._resizeCb && this._resizeCb()
   },
   unregisterCB() {
-    this._resizeCb = null
+    this._resizeCb = () => {}
   },
-  registerCB(cb) {
+  registerCB(cb:Function) {
     this._resizeCb = () => {
       cb && cb()
     }
   },
   _resizeCb() {},
-  init(designSize, keepScale = false) {
+  init(designSize: DesignSize, keepScale: boolean = false) {
     if (designSize) {
       if (!designSize.height || !designSize.width) {
         console.error('designSize width、height is require');

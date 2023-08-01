@@ -18,10 +18,10 @@ export const screenResize = () => {
     screenStyle.width = LSA.screenSize.width + 'px'
 
     const tips = getStore(SCREENTIPS, true)
-    if (!tips && height / width < 0.5) {
+    if (!tips && height / width < 0.48) {
       Modal.confirm({
         title: '显示效果不佳',
-        content: '请使用16:9分辨率效果更佳',
+        content: '请使用16:9宽高比分辨率屏幕展示效果更佳',
         okText: '确定',
         okType: 'danger',
         cancelText: '取消'

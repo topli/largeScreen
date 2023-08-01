@@ -60,16 +60,18 @@ import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL } from '@/constants/project'
 import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
-import { getDataText } from './service'
+import { getMapData } from './service'
+// 获取所有地图边界数据
+const modules = import.meta.glob('@/assets/geo/**/*.json')
 
 const routerIns = useRouter()
-
 
 const mapRef = ref()
 const mapState = reactive<{
   ins?: echarts.EChartsType
   level?: MAP_LEVEL
-  mapData?: any
+  mapData?: any,
+  projectData?: any
 }>({})
 
 mapState.level = MAP_LEVEL.COUNTRY
@@ -82,7 +84,7 @@ const initMap = () => {
     echarts.registerMap("china", chinaData as any)
     mapState.mapData = chinaData
     // 绘制地图
-    renderMap("china", [{name:'新疆', value: {test1: 3,test2:1}}])
+    renderMap("china", mapState.projectData)
     areaPaths = []
     areaPaths[0] = {properties:{ name: 'china' }, mapData: chinaData}
     // 绑定点击事件
@@ -123,7 +125,7 @@ const selectArea = (params: any) => {
 
   if (find) {
     const folder = isCountry ? "province" : "city"
-    import(`@/assets/geo/${folder}/${find.properties.id}`).then((res) => {
+    modules[`/src/assets/geo/${folder}/${find.properties.id}.json`]().then((res: any) => {
       setArea(find.properties, res.default)
       mapState.level = isCountry ? MAP_LEVEL.PROVINCE : MAP_LEVEL.CITY
       areaPaths.push({properties: { ...find.properties }, mapData: res.default })
@@ -183,32 +185,34 @@ const ecOptions = reactive({
 })
 
 const toDetail = () => {
-  console.log(mapState);
   routerIns.push('/projectBoard')
 }
 
 const deptProjectRef = ref()
 
 const deptProjectClick = (params: any) => {
-  console.log(params);
-
-  routerIns.push('/deptBoard')
-  
+  routerIns.push({path: '/deptBoard', params})
 }
 
 onMounted(() => {
-  getDataText({})
+  // 初始化地图
+  initMap()
+  // 获取地图数据
+  getMapData({})
     .then(res => {
       console.log(res);
+      mapState.projectData = res || []
     })
-    .catch(() => {})
-  initMap()
-  setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
-  setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
-  setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
-
-  deptProjectRef.value.getEcIns().on('click', deptProjectClick)
-
+    .catch(() => { })
+    .finally(() => {
+      renderMap('china', mapState.projectData)
+      // 点图点击事件
+      deptProjectRef.value.getEcIns().on('click', deptProjectClick)
+      // 设置饼图数据
+      setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+    })
   window.addEventListener("resize", resize)
 })
 
@@ -220,7 +224,7 @@ onUnmounted(() => {
 .project-screen {
   color: #ffffff;
   font-family: YouSheBiaoTiHei;
-  background: url('~@/assets/images/project_bg.png') 100% 100% no-repeat;
+  background: url('@/assets/images/project_bg.png') 100% 100% no-repeat;
   background-position: center;
   .project-body {
     width: 100%;

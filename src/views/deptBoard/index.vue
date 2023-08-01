@@ -237,7 +237,7 @@ ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
 .dept-gantt {
   color: #ffffff;
   font-family: YouSheBiaoTiHei;
-  background: url('~@/assets/images/project_bg.png') 100% 100% no-repeat;
+  background: url('@/assets/images/project_bg.png') 100% 100% no-repeat;
   background-position: center;
   .dept-gantt-body {
     padding: 1.5rem;
@@ -258,7 +258,7 @@ ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
         margin: 0 1rem;
         font-size: 0.5rem;
         display: inline-flex;
-        background: url('~@/assets/images/title_bg.png');
+        background: url('@/assets/images/title_bg.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         width: 1.8rem;

@@ -54,7 +54,7 @@ setPieData(ecOptions.options3, pie3Config, `在研项目\n预警状态\n分布`)
 .project-gantt {
   color: #ffffff;
   font-family: YouSheBiaoTiHei;
-  background: url('~@/assets/images/project_bg.png') 100% 100% no-repeat;
+  background: url('@/assets/images/project_bg.png') 100% 100% no-repeat;
   background-position: center;
   .project-gantt-body {
     padding: 1.5rem;

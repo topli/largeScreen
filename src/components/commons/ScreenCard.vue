@@ -49,7 +49,7 @@ defineProps(['title'])
       width: 28px;
       height: 36px;
       display: inline-block;
-      background: url('~@/assets/images/title_icon.png') 100% 100% no-repeat;
+      background: url('@/assets/images/title_icon.png') 100% 100% no-repeat;
     }
     .screen-card-title {
       margin-top: 2px;

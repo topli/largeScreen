@@ -22,7 +22,7 @@ const randomColor = (): any => { return { 'background': colors[Math.floor(Math.r
 const sortName = (fullName: string) => fullName.substring(0, 2)
 </script>
 <style scoped lang='scss'>
-@import '~@/styles/mixins/common.scss';
+@import '@/styles/mixins/common.scss';
 .person-tree-node {
   .group-title {
     color: #fff;

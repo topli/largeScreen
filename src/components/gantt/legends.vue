@@ -28,7 +28,7 @@ if (props.items && props.items.length) {
 
 </script>
 <style scoped lang='scss'>
-@import '~@/styles/mixins/common.scss';
+@import '@/styles/mixins/common.scss';
 .gantt-legends-wrapper {
   color: #fff;
   .legend-easy {

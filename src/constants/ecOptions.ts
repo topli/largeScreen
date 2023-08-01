@@ -1,13 +1,13 @@
 import * as echarts from 'echarts'
 
 export const pathSymbols = {
-  plane: require("@/assets/images/plane.png"),
-  missile: require("@/assets/images/missile.png"),
-  train: require("@/assets/images/train.png"),
-  ship: require("@/assets/images/ship.png"),
-  car: require("@/assets/images/car.png"),
-  satellite: require("@/assets/images/satellite.png"),
-  radar: require("@/assets/images/radar.png"),
+  plane: import("@/assets/images/plane.png"),
+  missile: import("@/assets/images/missile.png"),
+  train: import("@/assets/images/train.png"),
+  ship: import("@/assets/images/ship.png"),
+  car: import("@/assets/images/car.png"),
+  satellite: import("@/assets/images/satellite.png"),
+  radar: import("@/assets/images/radar.png"),
 }
 export const projectStatusPie = function () {
   return {

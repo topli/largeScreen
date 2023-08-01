@@ -3,7 +3,7 @@ export const setPieData = (options: any, config: Array<any>, title?: string) => 
   options.legend.data = config.map(item => item.name)
   options.series[0].data = config.map(item => {
     return {
-      value: 100,
+      value: item.value,
       name: item.name,
       itemStyle: {
         color: item.innerColor
@@ -12,7 +12,7 @@ export const setPieData = (options: any, config: Array<any>, title?: string) => 
   })
   options.series[1].data = config.map(item => {
     return {
-      value: 100,
+      value: item.value,
       name: item.name,
       itemStyle: {
         color: item.color

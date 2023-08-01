@@ -13,7 +13,7 @@
       <div class="project-body-center">
         <div class="top-title">项目区域分布</div>
         <div class="center-header">
-          <Total v-model="testData">
+          <Total v-model="totalData.totalItems">
             <div class="to-detail">
               <a-tooltip title="查看详情">
                 <img src="~@/assets/images/to_detail.png" @click="toDetail">
@@ -53,12 +53,13 @@ import Echarts from "@/components/echarts/index.vue"
 import ScreenCard from "@/components/commons/ScreenCard.vue"
 import LargeScreenMain from "@/components/largeScreenMain/index.vue"
 import Total from "@/components/commons/Total.vue"
+import _ from 'lodash'
 import { onMounted, onUnmounted, reactive, ref } from "vue"
 import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
-import { MAP_LEVEL } from '@/constants/project'
-import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
+import { MAP_LEVEL, TotalItem } from '@/constants/project'
+import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
 import { getMapData } from './service'
 // 获取所有地图边界数据
@@ -71,9 +72,21 @@ const mapState = reactive<{
   ins?: echarts.EChartsType
   level?: MAP_LEVEL
   mapData?: any,
-  projectData?: any
+  projectData?: any,
 }>({})
 
+const totalData = reactive<{
+  totalItems: Array<TotalItem>
+}>({
+  totalItems: [
+    { label: '区域项目总数', value: '554', unit: '单位'},
+    { label: '区域在研项目数', value: '541', unit: '单位'},
+    { label: '在研产品数', value: '897', unit: '单位'},
+    { label: '区域客户数', value: '771', unit: '单位'},
+    { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
+    { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+  ]
+})
 mapState.level = MAP_LEVEL.COUNTRY
 
 const initMap = () => {
@@ -96,14 +109,14 @@ const initMap = () => {
   }
 }
 
-const testData = [
-  { label: '区域项目总数', value: '554', unit: '单位'},
-  { label: '区域在研项目数', value: '541', unit: '单位'},
-  { label: '在研产品数', value: '897', unit: '单位'},
-  { label: '区域客户数', value: '771', unit: '单位'},
-  { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-  { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
-]
+const initData = () => {
+    // 点图点击事件
+    deptProjectRef.value.getEcIns().on('click', deptProjectClick)
+    // 设置饼图数据
+    setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
+    setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
+    setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+}
 
 const resize = () => {
   mapState.ins?.resize()
@@ -193,25 +206,57 @@ const deptProjectRef = ref()
 const deptProjectClick = (params: any) => {
   routerIns.push({path: '/deptBoard', params})
 }
+const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
+const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
+const pie3: Array<PieItem> = _.cloneDeep(pie3Config)
 
 onMounted(() => {
   // 初始化地图
   initMap()
+  // 初始化其他数据
+  initData()
   // 获取地图数据
   getMapData({})
     .then(res => {
-      console.log(res);
-      mapState.projectData = res || []
-    })
-    .catch(() => { })
-    .finally(() => {
-      renderMap('china', mapState.projectData)
+      const { reportData, zoneData } = res.data || {}
+
+      if (reportData) {
+        totalData.totalItems[0].value = reportData.project_num || 0
+        totalData.totalItems[1].value = reportData.run_project || 0
+        totalData.totalItems[2].value = reportData.run_product || 0
+        totalData.totalItems[3].value = reportData.custom_num || 0
+        totalData.totalItems[4].value = reportData.project_delay_rate || 0
+        totalData.totalItems[5].value = reportData.once_product_rate || 0
+      }
+
+      pie1.map(item => {
+        item.value = reportData.project_state[item.key] || 0
+      })
+      pie2.map(item => {
+        item.value = reportData.project_urgent_state[item.key] || 0
+      })
+      pie3.map(item => {
+        item.value = reportData.project_warn_state[item.key] || 0
+      })
+      if (zoneData) {
+        ecOptions.areaStatisticsOptions.xAxis[0].data = []
+        zoneData.forEach((key: string) => {
+          const item = zoneData[key]
+          ecOptions.areaStatisticsOptions.xAxis[0].data.push(key)
+
+          ecOptions.areaStatisticsOptions.series[0].data.push(item.completed)
+          ecOptions.areaStatisticsOptions.series[1].data.push(item.running)
+          ecOptions.areaStatisticsOptions.series[2].data.push(item.suspend)
+          ecOptions.areaStatisticsOptions.series[3].data.push(item.sum)
+        })
+      }
+      renderMap('china', mapState.projectData || [])
       // 点图点击事件
       deptProjectRef.value.getEcIns().on('click', deptProjectClick)
       // 设置饼图数据
-      setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
-      setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
-      setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
     })
   window.addEventListener("resize", resize)
 })

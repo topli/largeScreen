@@ -853,29 +853,36 @@ export const domainAnalysisOptions = function () {
   }
 }
 
+export interface PieItem {
+  name: string,
+  color: string,
+  innerColor: string,
+  key: string,
+  value: string | number
+}
 
 
-export const pie1Config = [
-  { name: '在研', color: '#4E66FA', innerColor: '#3D55E8' },
-  { name: '挂起', color: '#DF4949', innerColor: '#C94040' },
-  { name: '终止', color: '#46F9FF', innerColor: '#1DD2D8' },
-  { name: '已完成', color: '#6DD400', innerColor: '#4A9400' }
+export const pie1Config: Array<PieItem> = [
+  { name: '在研', color: '#4E66FA', innerColor: '#3D55E8', key: 'running', value: 0 },
+  { name: '挂起', color: '#DF4949', innerColor: '#C94040', key: 'suspend', value: 0 },
+  { name: '终止', color: '#46F9FF', innerColor: '#1DD2D8', key: 'cancel', value: 0 },
+  { name: '已完成', color: '#6DD400', innerColor: '#4A9400', key: 'completed', value: 0 }
 ]
 
-export const pie2Config = [
-  { name: '特紧急', color: '#FFD264', innerColor: '#BC9A48' },
-  { name: '三级', color: '#6DD400', innerColor: '#4A9400' },
-  { name: '二级', color: '#46F9FF', innerColor: '#1DD2D8' },
-  { name: '一级', color: '#4E66FA', innerColor: '#3D55E8' }
+export const pie2Config: Array<PieItem> = [
+  { name: '特紧急', color: '#FFD264', innerColor: '#BC9A48', key: 'urgent', value: 0 },
+  { name: '三级', color: '#6DD400', innerColor: '#4A9400', key: 'three_star', value: 0 },
+  { name: '二级', color: '#46F9FF', innerColor: '#1DD2D8', key: 'two_star', value: 0 },
+  { name: '一级', color: '#4E66FA', innerColor: '#3D55E8', key: 'one_star', value: 0 }
 ]
-export const pie3Config = [
-  { name: '正常', color: '#4E66FA', innerColor: '#3D55E8' },
-  { name: '预警', color: '#FFD264', innerColor: '#BC9A48' },
-  { name: '延期', color: '#DF4949', innerColor: '#C94040' },
+export const pie3Config: Array<PieItem> = [
+  { name: '正常', color: '#4E66FA', innerColor: '#3D55E8', key: 'normal', value: 0 },
+  { name: '预警', color: '#FFD264', innerColor: '#BC9A48', key: 'warn', value: 0 },
+  { name: '延期', color: '#DF4949', innerColor: '#C94040', key: 'delay', value: 0 },
 ]
 
 export const pie4Config = [
-  { name: '高频及高线性功率芯片组', color: '#6DD400', innerColor: '#4A9400' },
-  { name: '在研混合模式增强功率芯片组', color: '#4E66FA', innerColor: '#3D55E8' },
-  { name: '宽带高频率芯片组', color: '#46F9FF', innerColor: '#1DD2D8' },
+  { name: '高频及高线性功率芯片组', color: '#6DD400', innerColor: '#4A9400', key: '' },
+  { name: '在研混合模式增强功率芯片组', color: '#4E66FA', innerColor: '#3D55E8', key: '' },
+  { name: '宽带高频率芯片组', color: '#46F9FF', innerColor: '#1DD2D8', key: '' },
 ]

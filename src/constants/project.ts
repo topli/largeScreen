@@ -3,3 +3,10 @@ export enum MAP_LEVEL {
   "PROVINCE" = "PROVINCE",
   "CITY" = "CITY",
 }
+
+export interface TotalItem {
+  label?: string,
+  value?: string,
+  unit?: string,
+  color?: string
+}

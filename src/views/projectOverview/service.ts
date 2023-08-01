@@ -5,7 +5,7 @@ import request from "@/service/request";
 
 export const getMapData = (params: object): Promise<AxiosResponse<any, any>> => {
   return request({
-    method: "POST",
+    method: "GET",
     url: "/api/mission-vnext/BI-report/getProjectZoneReport",
     params,
   });

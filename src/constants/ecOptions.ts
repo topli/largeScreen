@@ -1,13 +1,20 @@
 import * as echarts from 'echarts'
+import plane from '@/assets/images/plane.png'
+import missile from '@/assets/images/missile.png'
+import train from '@/assets/images/train.png'
+import ship from '@/assets/images/ship.png'
+import car from '@/assets/images/car.png'
+import satellite from '@/assets/images/satellite.png'
+import radar from '@/assets/images/radar.png'
 
 export const pathSymbols = {
-  plane: import("@/assets/images/plane.png"),
-  missile: import("@/assets/images/missile.png"),
-  train: import("@/assets/images/train.png"),
-  ship: import("@/assets/images/ship.png"),
-  car: import("@/assets/images/car.png"),
-  satellite: import("@/assets/images/satellite.png"),
-  radar: import("@/assets/images/radar.png"),
+  plane: plane,
+  missile: missile,
+  train: train,
+  ship: ship,
+  car: car,
+  satellite: satellite,
+  radar: radar,
 }
 export const projectStatusPie = function () {
   return {
@@ -45,7 +52,6 @@ export const projectStatusPie = function () {
     },
     series: [
       {
-        name: '人员类型',
         type: 'pie',
         hoverAnimation: false,
         legendHoverLink: false,
@@ -90,7 +96,6 @@ export const projectStatusPie = function () {
         ]
       },
       {
-        name: '人员类型',
         type: 'pie',
         radius: ['50%', '70%'],
         center: ['50%', '50%'],

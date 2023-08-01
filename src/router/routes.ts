@@ -1,8 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router'
-const ProjectOverview = import('@/views/projectOverview/index.vue')
-const ProjectBoard = import('@/views/projectBoard/index.vue')
-const DeptBoard = import('@/views/deptBoard/index.vue')
-const DeptDetail = import('@/views/deptDetail/index.vue')
+
+import ProjectOverview from '@/views/projectOverview/index.vue'
+import ProjectBoard from '@/views/projectBoard/index.vue'
+import DeptBoard from '@/views/deptBoard/index.vue'
+import DeptDetail from '@/views/deptDetail/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/projectOverview'  },

@@ -5,7 +5,7 @@
       <div class="project-gantt-top">
         <div class="total-left">
           <div class="title">项目区域分布</div>
-          <Total v-model="testData"></Total>
+          <!-- <Total v-model="testData"></Total> -->
         </div>
         <div class="project-status">
           <Echarts style="height: 10rem" :options="ecOptions.options1"></Echarts>
@@ -24,21 +24,21 @@
 import { reactive } from "vue";
 import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
-import Total from "@/components/commons/Total.vue";
+// import Total from "@/components/commons/Total.vue";
 import Echarts from "@/components/echarts/index.vue";
 
 import Gantt from '@/components/gantt/index.vue';
 import { pie1Config, pie2Config, pie3Config, projectStatusPie } from "@/constants/ecOptions";
 import { setPieData } from "@/libs/utils/ehcarts";
-const testData = [
-  { label: '当前区域', value: '全国' },
-  { label: '区域项目总数', value: '554', unit: '单位'},
-  { label: '区域在研项目数', value: '541', unit: '单位'},
-  { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-  { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
-  { label: '区域客户数', value: '771', unit: '单位'},
-  { label: '在研产品数', value: '987', unit: '单位'},
-]
+// const testData = [
+//   { label: '当前区域', value: '全国' },
+//   { label: '区域项目总数', value: '554', unit: '单位'},
+//   { label: '区域在研项目数', value: '541', unit: '单位'},
+//   { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
+//   { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+//   { label: '区域客户数', value: '771', unit: '单位'},
+//   { label: '在研产品数', value: '987', unit: '单位'},
+// ]
 
 
 const ecOptions = reactive({

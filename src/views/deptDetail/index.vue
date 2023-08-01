@@ -4,7 +4,7 @@
     <div class="dept-gantt-body">
       <div class="dept-gantt-total">
         <div class="title">项目明细甘特图看版</div>
-        <Total v-model="testData"></Total>
+        <!-- <Total v-model="testData"></Total> -->
       </div>
       <PersonTree></PersonTree>
     </div>
@@ -14,19 +14,19 @@
 <script setup lang='ts'>
 import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
-import Total from "@/components/commons/Total.vue";
+// import Total from "@/components/commons/Total.vue";
 import PersonTree from "@/components/personTree/index.vue";
 
-const testData = [
-  { label: '当前区域', value: '全国' },
-  { label: '当前组别', value: '554'},
-  { label: '当前设计师', value: '554'},
-  { label: '当前项目总数', value: '554', unit: '单位'},
-  { label: '当前在研项目数', value: '541', unit: '单位'},
-  { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-  { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
-  { label: '在研产品数', value: '987', unit: '单位'},
-]
+// const testData = [
+//   { label: '当前区域', value: '全国' },
+//   { label: '当前组别', value: '554'},
+//   { label: '当前设计师', value: '554'},
+//   { label: '当前项目总数', value: '554', unit: '单位'},
+//   { label: '当前在研项目数', value: '541', unit: '单位'},
+//   { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
+//   { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+//   { label: '在研产品数', value: '987', unit: '单位'},
+// ]
 
 </script>
 <style scoped lang='scss'>

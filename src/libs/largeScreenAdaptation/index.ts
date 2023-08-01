@@ -69,7 +69,7 @@ export default {
     }
   },
   _resizeCb() {},
-  init(designSize: DesignSize, keepScale: boolean = false) {
+  init(designSize: DesignSize = defDesignSize, keepScale: boolean = false) {
     if (designSize) {
       if (!designSize.height || !designSize.width) {
         console.error('designSize width、height is require');

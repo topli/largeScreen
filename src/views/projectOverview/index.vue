@@ -53,7 +53,7 @@ import Echarts from "@/components/echarts/index.vue"
 import ScreenCard from "@/components/commons/ScreenCard.vue"
 import LargeScreenMain from "@/components/largeScreenMain/index.vue"
 import Total from "@/components/commons/Total.vue"
-import _ from 'lodash'
+import _ from "lodash"
 import { onMounted, onUnmounted, reactive, ref } from "vue"
 import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
@@ -239,8 +239,9 @@ onMounted(() => {
         item.value = reportData.project_warn_state[item.key] || 0
       })
       if (zoneData) {
+        const keys = Object.keys(zoneData)
         ecOptions.areaStatisticsOptions.xAxis[0].data = []
-        zoneData.forEach((key: string) => {
+        keys.forEach((key: string) => {
           const item = zoneData[key]
           ecOptions.areaStatisticsOptions.xAxis[0].data.push(key)
 

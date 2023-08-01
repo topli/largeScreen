@@ -11,14 +11,14 @@
           <span>当前项目</span>
           <span>总数状态分布</span>
         </div>
-        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
-        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
-        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
+        <Echarts style="height: 10rem;width: 14rem;" :options="ecOptions.projectStatusPie1"></Echarts>
+        <Echarts style="height: 10rem;width: 14rem;" :options="ecOptions.projectStatusPie2"></Echarts>
+        <Echarts style="height: 10rem;width: 14rem;" :options="ecOptions.projectStatusPie3"></Echarts>
         <div class="project-status-title">
           <span>科室项目</span>
           <span>组别分布</span>
         </div>
-        <Echarts style="height: 8rem;width: 12rem;" :options="ecOptions.options5"></Echarts>
+        <Echarts style="height: 10rem;width: 20rem;" :options="ecOptions.projectStatusPie4"></Echarts>
       </div>
       <ScreenCard title="科室项目分布">
         <Echarts style="height: 10rem" :options="ecOptions.options1"></Echarts>
@@ -39,7 +39,8 @@ import Echarts from "@/components/echarts/index.vue";
 import ScreenCard from "@/components/commons/ScreenCard.vue"
 
 import Gantt from '@/components/gantt/index.vue';
-import { projectStatusPie } from "@/constants/ecOptions";
+import { pie1Config, pie2Config, pie3Config, pie4Config, projectStatusPie } from "@/constants/ecOptions";
+import { setPieData } from "@/libs/utils/ehcarts";
 const testData = [
   { label: '当前区域', value: '全国' },
   { label: '当前组别', value: '554'},
@@ -219,8 +220,18 @@ const ecOptions = reactive({
       },
     ],
   },
-  options5: projectStatusPie()
+  projectStatusPie1: projectStatusPie(),
+  projectStatusPie2: projectStatusPie(),
+  projectStatusPie3: projectStatusPie(),
+  projectStatusPie4: projectStatusPie()
 })
+
+setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
+setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
+setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+setPieData(ecOptions.projectStatusPie4, pie4Config)
+ecOptions.projectStatusPie4.series[0].center = ['30%', '50%'];
+ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
 </script>
 <style scoped lang='scss'>
 .dept-gantt {

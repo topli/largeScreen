@@ -32,6 +32,7 @@ export const projectStatusPie = function () {
         }
     },
     legend: {
+      selectedMode: false,
       orient: 'vertical',
       right: 0,
       top: 'center',
@@ -44,92 +45,94 @@ export const projectStatusPie = function () {
     },
     series: [
       {
-            name: '人员类型',
-            type: 'pie',
-            hoverAnimation: false,
-            legendHoverLink: false,
-            radius: ['40%', '50%'],
-            label: {
-              show: false,
-            },
-            labelLine: {
-              normal: {
-                  show: false
-              },
-            },
-            tooltip: {
-              show: false,
-            },
-            data: [
-              {
-                value: 100,
-                itemStyle: {
-                  color: '#BC9A48'
-                }
-              },
-              {
-                  value: 100,
-                  itemStyle: {
-                    color: '#4A9400'
-                  }
-              },
-              {
-                  value: 100,
-                  itemStyle: {
-                    color: '#1DD2D8'
-                  }
-              },
-              {
-                  value: 100,
-                  itemStyle: {
-                    color: '#3D55E8'
-                  }
-              }
-            ]
+        name: '人员类型',
+        type: 'pie',
+        hoverAnimation: false,
+        legendHoverLink: false,
+        radius: ['40%', '50%'],
+        center: ['50%', '50%'],
+        label: {
+          show: false,
         },
-        {
-            name: '人员类型',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            labelLine: {
-              show: false,
-            },
-            label: {
-              show:false
-            },
-            data: [
-              {
-                    value: 100,
-                    name: '特紧急',
-                    itemStyle: {
-                      color: '#F7B500'
-                    }
-                },
-                {
-                    value: 100,
-                    name: '三级',
-                    itemStyle: {
-                      color: '#5DB703'
-                    }
-                },
-                {
-                    value: 100,
-                    name: '二级',
-                    itemStyle: {
-                      color: '#00FAD4'
-                    }
-                },
-                {
-                    value: 100,
-                    name: '一级',
-                    itemStyle: {
-                      color: '#4E8AFA'
-                    }
-                }
-            ]
-        }
+        labelLine: {
+          normal: {
+            show: false
+          },
+        },
+        tooltip: {
+          show: false,
+        },
+        data: [
+          {
+            value: 100,
+            itemStyle: {
+              color: '#BC9A48'
+            }
+          },
+          {
+            value: 100,
+            itemStyle: {
+              color: '#4A9400'
+            }
+          },
+          {
+            value: 100,
+            itemStyle: {
+              color: '#1DD2D8'
+            }
+          },
+          {
+            value: 100,
+            itemStyle: {
+              color: '#3D55E8'
+            }
+          }
+        ]
+      },
+      {
+        name: '人员类型',
+        type: 'pie',
+        radius: ['50%', '70%'],
+        center: ['50%', '50%'],
+        labelLine: {
+          show: false,
+        },
+        label: {
+          show: false
+        },
+        data: [
+          {
+            value: 100,
+            name: '特紧急',
+            itemStyle: {
+              color: '#F7B500'
+            }
+          },
+          {
+            value: 100,
+            name: '三级',
+            itemStyle: {
+              color: '#5DB703'
+            }
+          },
+          {
+            value: 100,
+            name: '二级',
+            itemStyle: {
+              color: '#00FAD4'
+            }
+          },
+          {
+            value: 100,
+            name: '一级',
+            itemStyle: {
+              color: '#4E8AFA'
+            }
+          }
+        ]
+      }
     ]
-}
+  }
 }
 // 项目区域分布 地图配置
 export const projectMapOptions = function () {
@@ -869,4 +872,10 @@ export const pie3Config = [
   { name: '正常', color: '#4E66FA', innerColor: '#3D55E8' },
   { name: '预警', color: '#FFD264', innerColor: '#BC9A48' },
   { name: '延期', color: '#DF4949', innerColor: '#C94040' },
+]
+
+export const pie4Config = [
+  { name: '高频及高线性功率芯片组', color: '#6DD400', innerColor: '#4A9400' },
+  { name: '在研混合模式增强功率芯片组', color: '#4E66FA', innerColor: '#3D55E8' },
+  { name: '宽带高频率芯片组', color: '#46F9FF', innerColor: '#1DD2D8' },
 ]

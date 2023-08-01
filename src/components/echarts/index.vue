@@ -12,6 +12,13 @@ const ecRef = ref()
 
 let ecIns: echarts.EChartsType;
 
+const getEcIns = () => {
+  return ecIns
+}
+defineExpose({
+  getEcIns
+})
+
 const resize = () => {
   setTimeout(() => {
     ecIns?.resize()
@@ -35,6 +42,7 @@ onMounted(() => {
   setOption(props.options)
   resize()
   window.addEventListener('resize', resize)
+
 })
 
 watch(() => props.options, (val) => {

@@ -4,7 +4,7 @@
     <div class="project-body">
       <div class="project-body-left">
         <ScreenCard title="科室项目分布">
-          <Echarts style="height: 23rem" :options="ecOptions.deptProjectOptions"></Echarts>
+          <Echarts ref="deptProjectRef" style="height: 23rem" :options="ecOptions.deptProjectOptions"></Echarts>
         </ScreenCard>
         <ScreenCard title="项目进展分析">
           <Echarts style="height: 23rem" :options="ecOptions.projectProgressOptions"></Echarts>
@@ -60,6 +60,7 @@ import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL } from '@/constants/project'
 import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
+import { getDataText } from './service'
 
 const routerIns = useRouter()
 
@@ -180,17 +181,34 @@ const ecOptions = reactive({
   projectStatusPie2: projectStatusPie(),
   projectStatusPie3: projectStatusPie()
 })
+
 const toDetail = () => {
   console.log(mapState);
   routerIns.push('/projectBoard')
 }
 
+const deptProjectRef = ref()
+
+const deptProjectClick = (params: any) => {
+  console.log(params);
+
+  routerIns.push('/deptBoard')
+  
+}
 
 onMounted(() => {
+  getDataText({})
+    .then(res => {
+      console.log(res);
+    })
+    .catch(() => {})
   initMap()
   setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
   setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
   setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+
+  deptProjectRef.value.getEcIns().on('click', deptProjectClick)
+
   window.addEventListener("resize", resize)
 })
 

@@ -1,15 +1,17 @@
 <template>
   <div class="gantt-legends-wrapper">
     <template v-if="type === 'easy'">
-      <div :key="leg.value" v-for="leg in items" class="legend-easy" :style="{background: leg.color}">{{ leg.text }}</div>
+      <div :key="leg.text" v-for="leg in items" class="legend-easy" :style="{background: leg.color}">{{ leg.text }}</div>
     </template>
-    <div class="legend-cell" v-else-if="props.modelValue && findItem">
+    <div class="legend-cell" v-else-if="props.modelValue">
       <div class="legend-cell-bg" :style="{background: findItem.color}"></div>
-      <div class="legend-cell-value" :style="{background: findItem.color}">{{ findItem.value }}</div>
+      <div class="legend-cell-value" :style="{background: findItem.color}">
+        {{  props.modelValue.cnt }}  
+      </div>
       <div class="legend-cell-text">
         <a-tooltip>
-          <template #title>{{ findItem.text }}</template>
-          {{ findItem.text }}
+          <template #title>{{ props.modelValue.start_time + '-' + props.modelValue.end_time }}</template>
+          {{ props.modelValue.state + '/' + props.modelValue.delay }}
         </a-tooltip>
       </div>
     </div>
@@ -17,13 +19,16 @@
 </template>
 
 <script setup lang='ts'>
+import _ from 'lodash';
 import { ref } from 'vue';
 
 const props = defineProps(['items', 'modelValue', 'type'])
-const findItem = ref()
+const findItem = ref<any>({})
 
-if (props.items && props.items.length) {
-  findItem.value = props.items.find((item: any) => item.value === props.modelValue)
+if (props.items && props.items.length && props.modelValue) {
+  findItem.value = props.items.find((item: any) => {
+    return item.text === props.modelValue.delay
+  })
 }
 
 </script>

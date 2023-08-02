@@ -1,8 +1,11 @@
 <template>
-  <RouterView></RouterView>
+  <a-style-provider hash-priority="high" :transformers="[legacyLogicalPropertiesTransformer]">
+    <RouterView></RouterView>
+  </a-style-provider>
 </template>
 
 <script setup lang="ts">
+import { legacyLogicalPropertiesTransformer } from 'ant-design-vue';
 
 </script>
 

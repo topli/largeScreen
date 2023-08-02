@@ -79,12 +79,12 @@ const getProjectNumTotal = () => {
     .then(res => {
       const { reportData } = res.data || {}
       if (reportData) {
-        totalData.totalItems[0].value = reportData.project_num || 0
-        totalData.totalItems[1].value = reportData.run_project || 0
-        totalData.totalItems[2].value = reportData.run_product || 0
-        totalData.totalItems[3].value = reportData.custom_num || 0
-        totalData.totalItems[4].value = reportData.project_delay_rate || 0
-        totalData.totalItems[5].value = reportData.once_product_rate || 0
+        totalData.totalItems[1].value = reportData.project_num || 0
+        totalData.totalItems[2].value = reportData.run_project || 0
+        totalData.totalItems[3].value = reportData.run_product || 0
+        totalData.totalItems[4].value = reportData.custom_num || 0
+        totalData.totalItems[5].value = reportData.project_delay_rate || 0
+        totalData.totalItems[6].value = reportData.once_product_rate || 0
       }
 
       pie1.map(item => {
@@ -117,7 +117,10 @@ const getList = () => {
 
 onMounted(() => {
   const { name } = route.query as any
-  totalData.totalItems[0].value = name === 'china' ? '全国': name
+  totalData.totalItems[0].value = name === 'china' ? '全国' : name
+
+  console.log(totalData);
+  
   // 获取地图数据
   getProjectNumTotal()
   getList()

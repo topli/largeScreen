@@ -20,13 +20,18 @@ import Legends from './legends.vue';
 
 const props = defineProps(['list', 'columns'])
 
+// const legends = [
+//   { text: '完成/未延期', color: '#6DD400'},
+//   { text: '进行中/将延期', color: '#8000F3'},
+//   { text: '完成/延期', color: '#05E2EF'},
+//   { text: '进行中/延期', color: '#FFAE12'},
+//   { text: '进行中/未延期', color: '#0065F3'},
+//   { text: '未开始/延期', color: '#FF0000'},
+// ]
 const legends = [
-  { value: 1, text: '完成/未延期', color: '#6DD400'},
-  { value: 2, text: '进行中/将延期', color: '#8000F3'},
-  { value: 3, text: '完成/延期', color: '#05E2EF'},
-  { value: 4, text: '进行中/延期', color: '#FFAE12'},
-  { value: 5, text: '进行中/未延期', color: '#0065F3'},
-  { value: 6, text: '未开始/延期', color: '#FF0000'},
+  { text: '未延期', color: '#6DD400'},
+  { text: '将延期', color: '#FFAE12'},
+  { text: '延期', color: '#FF0000'},
 ]
 
 const state = reactive({

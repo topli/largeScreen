@@ -197,9 +197,10 @@ const ecOptions = reactive({
   projectStatusPie2: projectStatusPie(),
   projectStatusPie3: projectStatusPie()
 })
-
 const toDetail = () => {
-  routerIns.push('/projectBoard')
+  // cur_level 当前区域类型   0国 1省 2市
+  const routeData = routerIns.resolve({ path: '/projectBoard', query: {cur_level: areaPaths.length, ...areaPaths[areaPaths.length - 1].properties} });
+  window.open(routeData.href, '_blank');
 }
 
 const deptProjectRef = ref()

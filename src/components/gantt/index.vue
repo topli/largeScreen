@@ -1,6 +1,6 @@
 <template>
   <div ref="elRef" class="gantt-wrapper">
-    <a-table :dataSource="data" :columns="columns" :pagination="false" :scroll="{y: `${state.tableHeight}`}">
+    <a-table :dataSource="props.list" :columns="props.columns" :pagination="false" :scroll="{y: `${state.tableHeight}`}">
       <template #bodyCell="{ column, record }">
         <template v-if="column.type === 'node_status'">
           <Legends :items="legends" v-model="record[column.key]"></Legends>
@@ -17,174 +17,8 @@
 <script setup lang='ts'>
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import Legends from './legends.vue';
-const columns = [
-  {
-    title: '设计师',
-    dataIndex: 'name',
-    key: 'name',
-    width: 120
-  },
-  {
-    title: '项目背景',
-    dataIndex: 'age',
-    key: 'age',
-    width: 120
-  },
-  {
-    title: '产品名称',
-    dataIndex: 'address',
-    key: 'address',
-    width: 120
-  },
-  {
-    title: '单位简称',
-    key: 'tags',
-    dataIndex: 'tags',
-    width: 120
-  },
-  {
-    title: '紧急度',
-    key: 'action',
-    width: 120
-  },
-  {
-    title: '难度',
-    key: 'action',
-    width: 120
-  },
-  {
-    title: '评估',
-    key: 'node_status',
-    type: 'node_status'
-  },
-  {
-    title: '方案',
-    key: 'node_status1',
-    type: 'node_status'
-  },
-  {
-    title: '设计',
-    key: 'action',
-  },
-  {
-    title: '测试',
-    key: 'action',
-  },
-  {
-    title: '标准',
-    key: 'action',
-  },
-];
 
-const data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-    node_status: 1,
-    node_status1: 3
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 4,
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    node_status: 1,
-    node_status1: 2,
-    tags: ['cool', 'teacher'],
-  },
-];
+const props = defineProps(['list', 'columns'])
 
 const legends = [
   { value: 1, text: '完成/未延期', color: '#6DD400'},
@@ -260,6 +94,13 @@ onUnmounted(() => {
         }
         .ant-table-cell-row-hover {
           background-color: transparent!important;
+        }
+      }
+      .ant-table-placeholder {
+        &:hover{
+          .ant-table-cell {
+            background-color: transparent;
+          }
         }
       }
     }

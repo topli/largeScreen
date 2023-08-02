@@ -5,50 +5,125 @@
       <div class="project-gantt-top">
         <div class="total-left">
           <div class="title">项目区域分布</div>
-          <!-- <Total v-model="testData"></Total> -->
+          <Total v-model="totalData.totalItems"></Total>
         </div>
         <div class="project-status">
-          <Echarts style="height: 10rem" :options="ecOptions.options1"></Echarts>
-          <Echarts style="height: 10rem" :options="ecOptions.options2"></Echarts>
-          <Echarts style="height: 10rem" :options="ecOptions.options3"></Echarts>
+          <Echarts style="height: 10rem" :options="ecOptions.projectStatusPie1"></Echarts>
+          <Echarts style="height: 10rem" :options="ecOptions.projectStatusPie2"></Echarts>
+          <Echarts style="height: 10rem" :options="ecOptions.projectStatusPie3"></Echarts>
         </div>
       </div>
       <div class="project-gantt-table">
-        <Gantt></Gantt>
+        <Gantt :list="gantt.list" :columns="gantt.columns"></Gantt>
       </div>
     </div>
   </LargeScreenMain>
 </template>
 
 <script setup lang='ts'>
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
+import _ from 'lodash'
 import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
-// import Total from "@/components/commons/Total.vue";
+import Total from "@/components/commons/Total.vue";
 import Echarts from "@/components/echarts/index.vue";
 
 import Gantt from '@/components/gantt/index.vue';
-import { pie1Config, pie2Config, pie3Config, projectStatusPie } from "@/constants/ecOptions";
+import { pie1Config, pie2Config, pie3Config, PieItem, projectStatusPie } from "@/constants/ecOptions";
 import { setPieData } from "@/libs/utils/ehcarts";
-// const testData = [
-//   { label: '当前区域', value: '全国' },
-//   { label: '区域项目总数', value: '554', unit: '单位'},
-//   { label: '区域在研项目数', value: '541', unit: '单位'},
-//   { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-//   { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
-//   { label: '区域客户数', value: '771', unit: '单位'},
-//   { label: '在研产品数', value: '987', unit: '单位'},
-// ]
+import { TotalItem } from "@/constants/project";
+import { columns } from "@/constants/common";
+import { getMapData } from "../projectOverview/service";
+import { useRoute } from "vue-router";
+import { getReportDataList } from "./service";
 
+const totalData = reactive<{
+  totalItems: Array<TotalItem>
+}>({
+  totalItems: [
+    { label: '当前区域', value: '554'},
+    { label: '区域项目总数', value: '554', unit: '单位'},
+    { label: '区域在研项目数', value: '541', unit: '单位'},
+    { label: '在研产品数', value: '897', unit: '单位'},
+    { label: '区域客户数', value: '771', unit: '单位'},
+    { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
+    { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+  ]
+})
+const gantt = reactive({
+  list: [],
+  columns: columns
+})
 
 const ecOptions = reactive({
-  options1: projectStatusPie(),
-  options2: projectStatusPie(),
-  options3: projectStatusPie()
+  projectStatusPie1: projectStatusPie(),
+  projectStatusPie2: projectStatusPie(),
+  projectStatusPie3: projectStatusPie()
 })
-setPieData(ecOptions.options1, pie1Config, `区域项目\n总数状态\n分布`)
-setPieData(ecOptions.options2, pie2Config, `在研项目\n紧急度\n分布`)
-setPieData(ecOptions.options3, pie3Config, `在研项目\n预警状态\n分布`)
+setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
+setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
+setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+
+const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
+const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
+const pie3: Array<PieItem> = _.cloneDeep(pie3Config)
+
+
+const route = useRoute()
+
+const getProjectNumTotal = () => {
+  console.log(route);
+  const { cur_level, name } = route.query as any
+  const level = cur_level - 1
+  getMapData({type: level - 1 === 0 ? null : level, value: name})
+    .then(res => {
+      const { reportData } = res.data || {}
+      if (reportData) {
+        totalData.totalItems[0].value = reportData.project_num || 0
+        totalData.totalItems[1].value = reportData.run_project || 0
+        totalData.totalItems[2].value = reportData.run_product || 0
+        totalData.totalItems[3].value = reportData.custom_num || 0
+        totalData.totalItems[4].value = reportData.project_delay_rate || 0
+        totalData.totalItems[5].value = reportData.once_product_rate || 0
+      }
+
+      pie1.map(item => {
+        item.value = reportData.project_state[item.key] || 0
+      })
+      pie2.map(item => {
+        item.value = reportData.project_urgent_state[item.key] || 0
+      })
+      pie3.map(item => {
+        item.value = reportData.project_warn_state[item.key] || 0
+      })
+      // 设置饼图数据
+      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
+    })
+}
+
+const getList = () => {
+  const { cur_level, name } = route.query as any
+  const params = {
+    type: cur_level,
+    value: cur_level === 1 ? null : name
+  }
+  getReportDataList(params).then(res => {
+    console.log(res);
+    gantt.list = res.data.value
+  })
+}
+
+onMounted(() => {
+  const { name } = route.query as any
+  totalData.totalItems[0].value = name === 'china' ? '全国': name
+  // 获取地图数据
+  getProjectNumTotal()
+  getList()
+})
+
+
 </script>
 <style scoped lang='scss'>
 .project-gantt {

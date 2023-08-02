@@ -74,8 +74,14 @@ const route = useRoute()
 const getProjectNumTotal = () => {
   console.log(route);
   const { cur_level, name } = route.query as any
-  const level = cur_level - 1
-  getMapData({type: level - 1 === 0 ? null : level, value: name})
+  // cur_level 地图层级深度 1 全国 2省 3市
+  // type 后台接收参数  null: 全国 1 省 2 市
+  let type = !cur_level || cur_level - 1 === 0 ? null : cur_level - 1
+  // 直辖市 type传2
+  if (['上海', '北京', '天津', '重庆'].includes(name ?? '')) {
+    type = 2
+  }
+  getMapData({type, value: name})
     .then(res => {
       const { reportData } = res.data || {}
       if (reportData) {
@@ -110,14 +116,13 @@ const getList = () => {
     value: cur_level === 1 ? null : name
   }
   getReportDataList(params).then(res => {
-    console.log(res);
     gantt.list = res.data.value
   })
 }
 
 onMounted(() => {
   const { name } = route.query as any
-  totalData.totalItems[0].value = name === 'china' ? '全国' : name
+  totalData.totalItems[0].value = name === 'china' || !name ? '全国' : name
 
   console.log(totalData);
   

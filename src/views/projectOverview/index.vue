@@ -79,12 +79,12 @@ const totalData = reactive<{
   totalItems: Array<TotalItem>
 }>({
   totalItems: [
-    { label: '区域项目总数', value: '554', unit: '单位'},
-    { label: '区域在研项目数', value: '541', unit: '单位'},
-    { label: '在研产品数', value: '897', unit: '单位'},
-    { label: '区域客户数', value: '771', unit: '单位'},
-    { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-    { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+    { label: '区域项目总数', value: '0', unit: '单位'},
+    { label: '区域在研项目数', value: '0', unit: '单位'},
+    { label: '在研产品数', value: '0', unit: '单位'},
+    { label: '区域客户数', value: '0', unit: '单位'},
+    { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
+    { label: '一次开发成功率', value: '0', unit: '%', color: '#6DD400'},
   ]
 })
 mapState.level = MAP_LEVEL.COUNTRY
@@ -150,6 +150,7 @@ const selectArea = (params: any) => {
 const setArea = (properties: any, mapData: any) => {
   mapState.mapData = mapData
   echarts.registerMap(properties.name, mapData as any)
+
   getProjectNumTotal(properties.name)
   setTimeout(() => {
     resize()
@@ -179,8 +180,9 @@ const renderMap = (map: string, data: any) => {
   option.geo.map = map
 
   option.tooltip.formatter = (params: any) => {
-    const {name, run_product, custom_num } = params
-    return `${name}<br>项目数: ${run_product || ''}<br>产品数：${custom_num || ''}`
+    const { name } = params
+    const { run_product, custom_num } = params.data || {}
+    return `${name}<br>项目数： ${run_product || '0'}<br>产品数：${custom_num || '0'}`
   }
 
   if (mapState.ins) {
@@ -225,6 +227,7 @@ onMounted(() => {
   window.addEventListener("resize", resize)
 })
 
+
 const getProjectNumTotal = (areaName?: string) => {
   // 判断当前区域等级
   const isCountry = mapState.level === MAP_LEVEL.COUNTRY
@@ -234,6 +237,10 @@ const getProjectNumTotal = (areaName?: string) => {
   if (isCountry) type = null
   if (isProvince) type = 1
   if (isCity) type = 2
+  // 直辖市 type传2
+  if (['上海', '北京', '天津', '重庆'].includes(areaName ?? '')) {
+    type = 2
+  }
   getMapData({type, value: areaName})
     .then(res => {
       const { reportData, zoneData, zoneProjectData } = res.data || {}
@@ -277,11 +284,12 @@ const getProjectNumTotal = (areaName?: string) => {
         const keys = Object.keys(zoneProjectData)
         keys.forEach((key: string) => {
           projectMapData.push({
-            name: 'key',
+            name: key,
             ...zoneProjectData[key]
           })
         })
       }
+      
       renderMap(areaName || 'china', projectMapData)
       // 设置饼图数据
       setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)

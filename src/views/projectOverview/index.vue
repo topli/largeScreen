@@ -79,10 +79,10 @@ const totalData = reactive<{
   totalItems: Array<TotalItem>
 }>({
   totalItems: [
-    { label: '区域项目总数', value: '0', unit: '单位'},
-    { label: '区域在研项目数', value: '0', unit: '单位'},
-    { label: '在研产品数', value: '0', unit: '单位'},
-    { label: '区域客户数', value: '0', unit: '单位'},
+    { label: '区域项目总数', value: '0', unit: ''},
+    { label: '区域在研项目数', value: '0', unit: ''},
+    { label: '在研产品数', value: '0', unit: ''},
+    { label: '区域客户数', value: '0', unit: ''},
     { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
     { label: '一次开发成功率', value: '0', unit: '%', color: '#6DD400'},
   ]
@@ -208,7 +208,9 @@ const toDetail = () => {
 const deptProjectRef = ref()
 
 const deptProjectClick = (params: any) => {
-  routerIns.push({path: '/deptBoard', params})
+  // cur_level 当前区域类型   0国 1省 2市
+  const routeData = routerIns.resolve({ path: '/deptBoard', query: { ...params } });
+  window.open(routeData.href, '_blank');
 }
 const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
 const pie2: Array<PieItem> = _.cloneDeep(pie2Config)

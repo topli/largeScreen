@@ -41,13 +41,13 @@ const totalData = reactive<{
   totalItems: Array<TotalItem>
 }>({
   totalItems: [
-    { label: '当前区域', value: '554'},
-    { label: '区域项目总数', value: '554', unit: '单位'},
-    { label: '区域在研项目数', value: '541', unit: '单位'},
-    { label: '在研产品数', value: '897', unit: '单位'},
-    { label: '区域客户数', value: '771', unit: '单位'},
-    { label: '项目延期率', value: '21.3', unit: '%', color: '#FF0000'},
-    { label: '一次开发成功率', value: '8.4', unit: '%', color: '#6DD400'},
+    { label: '当前区域', value: '0'},
+    { label: '区域项目总数', value: '0', unit: ''},
+    { label: '区域在研项目数', value: '0', unit: ''},
+    { label: '在研产品数', value: '0', unit: ''},
+    { label: '区域客户数', value: '0', unit: ''},
+    { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
+    { label: '一次开发成功率', value: '0', unit: '%', color: '#6DD400'},
   ]
 })
 const gantt = reactive({

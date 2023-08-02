@@ -546,6 +546,9 @@ export const areaStatisticsOptions = function () {
       trigger: 'axis'
     },
     grid: {
+      left: '80px',
+      right: '40px',
+      bottom: '40px',
       textStyle: {
         color: "#fff",
       },
@@ -592,6 +595,7 @@ export const areaStatisticsOptions = function () {
     yAxis: [
       {
         type: "value",
+        minInterval: 1,
         splitLine: {
           show: false,
         },
@@ -889,7 +893,7 @@ export const pie3Config: Array<PieItem> = [
 ]
 
 export const pie4Config = [
-  { name: '高频及高线性功率芯片组', color: '#6DD400', innerColor: '#4A9400', key: '' },
-  { name: '在研混合模式增强功率芯片组', color: '#4E66FA', innerColor: '#3D55E8', key: '' },
-  { name: '宽带高频率芯片组', color: '#46F9FF', innerColor: '#1DD2D8', key: '' },
+  { name: '高频及高线性功率芯片组', color: '#6DD400', innerColor: '#4A9400', value: 0, key: '' },
+  { name: '在研混合模式增强功率芯片组', color: '#4E66FA', innerColor: '#3D55E8', value: 0, key: '' },
+  { name: '宽带高频率芯片组', color: '#46F9FF', innerColor: '#1DD2D8', value: 0, key: '' },
 ]

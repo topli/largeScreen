@@ -9,7 +9,6 @@ import { getStore, clearStore } from '@/libs/utils';
  
 // 取消请求的标记
 let cancelToken: CancelTokenSource | null = null;
- console.log(import.meta);
  
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
@@ -25,11 +24,11 @@ service.interceptors.request.use(
 		const token = getStore('token');
 		if (token) config.headers!['token'] = token; // 在请求头中添加 token
  
-		// 如果存在上一次的请求，则取消它
-		if (cancelToken) cancelToken.cancel('取消请求');
-		// 如果存在上一次的请求，则取消它
-		cancelToken = axios.CancelToken.source();
-		config.cancelToken = cancelToken.token; // 设置取消请求的 token
+		// // 如果存在上一次的请求，则取消它
+		// if (cancelToken) cancelToken.cancel('取消请求');
+		// // 如果存在上一次的请求，则取消它
+		// cancelToken = axios.CancelToken.source();
+		// config.cancelToken = cancelToken.token; // 设置取消请求的 token
  
 		return config;
 	},

@@ -59,9 +59,9 @@ import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL, TotalItem } from '@/constants/project'
-import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie } from "@/constants/ecOptions"
+import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie, pathSymbols } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
-import { getMapData } from './service'
+import { getMapData, getProjectOtherReport } from './service'
 // 获取所有地图边界数据
 const modules = import.meta.glob('@/assets/geo/**/*.json')
 
@@ -139,8 +139,8 @@ const selectArea = (params: any) => {
   if (find) {
     const folder = isCountry ? "province" : "city"
     modules[`/src/assets/geo/${folder}/${find.properties.id}.json`]().then((res: any) => {
-      setArea(find.properties, res.default)
       mapState.level = isCountry ? MAP_LEVEL.PROVINCE : MAP_LEVEL.CITY
+      setArea(find.properties, res.default)
       areaPaths.push({properties: { ...find.properties }, mapData: res.default })
     })
 
@@ -150,7 +150,7 @@ const selectArea = (params: any) => {
 const setArea = (properties: any, mapData: any) => {
   mapState.mapData = mapData
   echarts.registerMap(properties.name, mapData as any)
-  renderMap(properties.name, [])
+  getProjectNumTotal(properties.name)
   setTimeout(() => {
     resize()
   }, 200)
@@ -167,6 +167,7 @@ const backMap = () => {
   } else {
     mapState.level = MAP_LEVEL.COUNTRY
     initMap()
+    getProjectNumTotal()
   }
 
 }
@@ -178,8 +179,8 @@ const renderMap = (map: string, data: any) => {
   option.geo.map = map
 
   option.tooltip.formatter = (params: any) => {
-    const {name, data} = params
-    return `${name}<br>项目数: ${data?.test1 || ''}<br>产品数：${data?.test2 || ''}`
+    const {name, run_product, custom_num } = params
+    return `${name}<br>项目数: ${run_product || ''}<br>产品数：${custom_num || ''}`
   }
 
   if (mapState.ins) {
@@ -210,16 +211,31 @@ const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
 const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
 const pie3: Array<PieItem> = _.cloneDeep(pie3Config)
 
+  
 onMounted(() => {
   // 初始化地图
   initMap()
   // 初始化其他数据
   initData()
   // 获取地图数据
-  getMapData({})
-    .then(res => {
-      const { reportData, zoneData } = res.data || {}
+  getProjectNumTotal()
+  // 获取其他报表数据
+  getOtherReport()
+  window.addEventListener("resize", resize)
+})
 
+const getProjectNumTotal = (areaName?: string) => {
+  // 判断当前区域等级
+  const isCountry = mapState.level === MAP_LEVEL.COUNTRY
+  const isProvince = mapState.level === MAP_LEVEL.PROVINCE
+  const isCity = mapState.level === MAP_LEVEL.CITY
+  let type = null
+  if (isCountry) type = null
+  if (isProvince) type = 1
+  if (isCity) type = 2
+  getMapData({type, value: areaName})
+    .then(res => {
+      const { reportData, zoneData, zoneProjectData } = res.data || {}
       if (reportData) {
         totalData.totalItems[0].value = reportData.project_num || 0
         totalData.totalItems[1].value = reportData.run_project || 0
@@ -238,9 +254,13 @@ onMounted(() => {
       pie3.map(item => {
         item.value = reportData.project_warn_state[item.key] || 0
       })
-      if (zoneData) {
+      if (!areaName && !_.isEmpty(zoneData)) {
         const keys = Object.keys(zoneData)
         ecOptions.areaStatisticsOptions.xAxis[0].data = []
+        ecOptions.areaStatisticsOptions.series[0].data = []
+        ecOptions.areaStatisticsOptions.series[1].data = []
+        ecOptions.areaStatisticsOptions.series[2].data = []
+        ecOptions.areaStatisticsOptions.series[3].data = []
         keys.forEach((key: string) => {
           const item = zoneData[key]
           ecOptions.areaStatisticsOptions.xAxis[0].data.push(key)
@@ -251,16 +271,113 @@ onMounted(() => {
           ecOptions.areaStatisticsOptions.series[3].data.push(item.sum)
         })
       }
-      renderMap('china', mapState.projectData || [])
-      // 点图点击事件
-      deptProjectRef.value.getEcIns().on('click', deptProjectClick)
+      const projectMapData: any = []
+      if (zoneProjectData) {
+        const keys = Object.keys(zoneProjectData)
+        keys.forEach((key: string) => {
+          projectMapData.push({
+            name: 'key',
+            ...zoneProjectData[key]
+          })
+        })
+      }
+      renderMap(areaName || 'china', projectMapData)
       // 设置饼图数据
       setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
       setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
       setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
     })
-  window.addEventListener("resize", resize)
-})
+    .catch(() => {
+      renderMap(areaName || 'china', [])
+    })
+}
+
+const getOtherReport = () => {
+  getProjectOtherReport().then(res => {
+    console.log(res);
+    const { departmentData, processData, sectorData } = res.data || {}
+    // 处理科室数据
+    if (departmentData && !_.isEmpty(departmentData)) {
+      const keys = Object.keys(departmentData)
+      ecOptions.deptProjectOptions.angleAxis.data = _.cloneDeep(keys)
+      const series = []
+      series[0] = keys.map(key => departmentData[key].delay)
+      series[1] = keys.map(key => departmentData[key].completed)
+      ecOptions.deptProjectOptions.series[0].data = series[0]
+      ecOptions.deptProjectOptions.series[1].data = series[1]
+    }
+    // 处理节点进程数据
+    if (processData && !_.isEmpty(processData)) {
+      const xData = []
+      const legend = ['评估', '方案', '设计', '流片', '测试', '送样', '标准']
+      const data: any = [[], [], [], [], [], [], []]
+
+      const series = []
+      for (let i = 0; i < processData.length; i++) {
+        const item = processData[i];
+        xData.push(item.text)
+        data[0].push(item.value?.assess)
+        data[1].push(item.value?.plan)
+        data[2].push(item.value?.design)
+        data[3].push(item.value?.respin)
+        data[4].push(item.value?.test)
+        data[5].push(item.value?.sample)
+        data[6].push(item.value?.standar)
+      }
+      for (let i = 0; i < legend.length; i++) {
+        const leg = legend[i];
+        series.push(
+          {
+            name: leg,
+            type: "line",
+            stack: "Total",
+            smooth: true,
+            lineStyle: {
+              width: 2,
+            },
+            showSymbol: false,
+            data: data[i],
+          }
+        )
+      }
+      ecOptions.projectProgressOptions.legend.data = legend
+      ecOptions.projectProgressOptions.xAxis[0].data = xData
+      ecOptions.projectProgressOptions.series = series
+    }
+
+    // 处理领域数据
+    if (sectorData && !_.isEmpty(sectorData)) {
+      const data: { [key: string]: any } = {
+        machine: { name: '飞机', icon: pathSymbols.plane },
+        elastic: { name: '导弹', icon: pathSymbols.plane },
+        ship: { name: '轮船', icon: pathSymbols.ship },
+        star: { name: '卫星', icon: pathSymbols.plane },
+        ground: { name: '地面', icon: pathSymbols.plane },
+        vehicle: { name: '车载', icon: pathSymbols.plane },
+        army: { name: '单兵', icon: pathSymbols.plane },
+        meter: { name: '仪器', icon: pathSymbols.plane },
+        replace: { name: '国产', icon: pathSymbols.plane }
+      }
+      const series: any[] = []
+      Object.keys(data).forEach((key: string) => {
+        const item = data[key];
+        series.push({
+          name: item.name,
+          value: sectorData[key],
+          symbol: 'image://' + pathSymbols[key],
+          symbolSize: [24, 24]
+        })
+      })
+      series.sort((a, b) => {
+        return a.value - b.value
+      })
+      console.log(series);
+      ecOptions.domainAnalysisOptions.xAxis.data = series.map(item => item.name)
+      ecOptions.domainAnalysisOptions.series = series
+    }
+  })
+}
+
 
 onUnmounted(() => {
   window.removeEventListener("resize", resize)

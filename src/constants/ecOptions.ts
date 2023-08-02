@@ -7,7 +7,7 @@ import car from '@/assets/images/car.png'
 import satellite from '@/assets/images/satellite.png'
 import radar from '@/assets/images/radar.png'
 
-export const pathSymbols = {
+export const pathSymbols: { [key: string]: any } = {
   plane: plane,
   missile: missile,
   train: train,
@@ -20,7 +20,7 @@ export const projectStatusPie = function () {
   return {
     tooltip: {
         trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)",
+        formatter: "{b}: {c} ({d}%)",
 
     },
     grid: {
@@ -52,6 +52,7 @@ export const projectStatusPie = function () {
     },
     series: [
       {
+        name: '',
         type: 'pie',
         hoverAnimation: false,
         legendHoverLink: false,
@@ -96,6 +97,7 @@ export const projectStatusPie = function () {
         ]
       },
       {
+        name: '',
         type: 'pie',
         radius: ['50%', '70%'],
         center: ['50%', '50%'],

@@ -1,7 +1,7 @@
 <template>
   <div class="total-container">
     <div class="style-box"></div>
-    <div class="total-item" v-for="item in props.modelValue" :key="item.type">
+    <div class="total-item" :class="{'is-link': !!item.click}" v-for="item in props.modelValue" :key="item.type" @click="item.click">
       <div class="total-item-header">
         {{ item.label }}
       </div>
@@ -40,6 +40,9 @@ const props = defineProps(['modelValue'])
         margin-left: 0.1rem;
         color: rgba(241, 243, 246, 1);
       }
+    }
+    &.is-link {
+      cursor: pointer;
     }
   }
   .style-box {

@@ -6,7 +6,7 @@
         <div class="title">项目明细甘特图看版</div>
         <Total v-model="totalData.totalItems"></Total>
       </div>
-      <div class="project-status">
+      <div class="project-status" v-show="!selectTarget">
         <div class="project-status-title">
           <span>当前项目</span>
           <span>总数状态分布</span>
@@ -20,25 +20,27 @@
         </div>
         <Echarts style="height: 10rem;width: 22rem;" :options="ecOptions.projectStatusPie4"></Echarts>
       </div>
-      <ScreenCard title="科室项目分布">
+      <ScreenCard title="科室项目分布" v-show="!selectTarget">
         <Echarts style="height: 10rem" :options="ecOptions.deptProjectOptions"></Echarts>
       </ScreenCard>
-      <div class="dept-gantt-table">
+      <div class="dept-gantt-table" v-show="!selectTarget">
         <Gantt :list="gantt.list" :columns="gantt.columns"></Gantt>
       </div>
+      <PersonTree v-show="selectTarget"></PersonTree>
     </div>
   </LargeScreenMain>
 </template>
 
 <script setup lang='ts'>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import LargeScreenMain from "@/components/largeScreenMain/index.vue";
 import Header from "@/components/commons/Header.vue";
 import Total from "@/components/commons/Total.vue";
 import Echarts from "@/components/echarts/index.vue";
 import ScreenCard from "@/components/commons/ScreenCard.vue"
-
+import PersonTree from "@/components/personTree/index.vue";
 import Gantt from '@/components/gantt/index.vue';
+
 import { areaStatisticsOptions, pie1Config, pie2Config, pie3Config, pie4Config, PieItem, projectStatusPie } from "@/constants/ecOptions";
 import { setPieData } from "@/libs/utils/ehcarts";
 import { TotalItem } from "@/constants/project";
@@ -55,7 +57,7 @@ const totalData = reactive<{
   totalItems: Array<TotalItem>
 }>({
   totalItems: [
-    { label: '当前区域', value: '未知'},
+    { label: '当前区域', value: '未知', click: () => { selectTarget.value = !selectTarget.value }},
     { label: '当前组别', value: ''},
     { label: '当前设计师', value: ''},
     { label: '当前项目总数', value: '0'},
@@ -392,6 +394,9 @@ const getList = () => {
     gantt.list = res.data.value
   })
 }
+
+
+const selectTarget = ref(false)
 </script>
 <style scoped lang='scss'>
 .dept-gantt {

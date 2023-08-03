@@ -8,5 +8,6 @@ export interface TotalItem {
   label?: string,
   value?: string,
   unit?: string,
-  color?: string
+  color?: string,
+  click?: Function
 }

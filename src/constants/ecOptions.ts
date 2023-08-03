@@ -348,7 +348,7 @@ export const deptProjectOptions = function () {
         //   focus: "series",
         // },
         itemStyle: {
-          color: "rgba(255,20,0,0.6)",
+          color: "rgba(255, 210, 100, 0.6)",
         },
       },
       {
@@ -361,7 +361,7 @@ export const deptProjectOptions = function () {
         //   focus: "series",
         // },
         itemStyle: {
-          color: "rgba(0,101,243,0.6)",
+          color: "rgba(0, 101, 243, 0.6)",
         },
       },
     ],
@@ -590,7 +590,7 @@ export const areaStatisticsOptions = function () {
       data: [
         { name: "完成", itemStyle: { color: '#00F1FF' } },
         { name: "进行", itemStyle: { color: '#0066F5' } },
-        { name: "延期", itemStyle: { color: '#FF1400' } },
+        { name: "延期", itemStyle: { color: 'rgba(248, 164, 65, 1)' } },
         { name: "项目总数", itemStyle: { color: '#6DD400' } }
       ],
     },
@@ -708,10 +708,10 @@ export const areaStatisticsOptions = function () {
             y2: 1,
             colorStops: [{
               offset: 0,
-              color: '#FF1400' // 0% 处的颜色
+              color: 'rgba(248, 164, 65, 1)' // 0% 处的颜色
             }, {
               offset: 1,
-              color: 'rgba(255,0,0,0)' // 100% 处的颜色
+              color: 'rgba(248, 164, 65, 0)' // 100% 处的颜色
             }],
             globalCoord: false // 缺省为 false
           },
@@ -767,7 +767,7 @@ export const domainAnalysisOptions = function () {
       }
     },
     xAxis: {
-      data: ['飞机', '火箭', '高铁', '轮船', '汽车', '卫星', '雷达'],
+      data: ['飞机', '火箭', '高铁', '轮船', '汽车', '卫星', '雷达', '单兵', '地面'],
       axisTick: { show: false },
       axisLine: { show: false },
       axisLabel: {
@@ -838,7 +838,20 @@ export const domainAnalysisOptions = function () {
             itemStyle: {
               color: linearGradient1
             }
-          }],
+          },
+          {
+            value: 1,
+            itemStyle: {
+              color: linearGradient2
+            }
+          },
+          {
+            value: 1,
+            itemStyle: {
+              color: linearGradient1
+            }
+          }
+        ],
         z: 10
       },
       {
@@ -910,7 +923,7 @@ export interface PieItem {
 
 export const pie1Config: Array<PieItem> = [
   { name: '在研', color: '#4E66FA', innerColor: '#3D55E8', key: 'running', value: 0 },
-  { name: '挂起', color: '#DF4949', innerColor: '#C94040', key: 'suspend', value: 0 },
+  { name: '挂起', color: '#F8A441', innerColor: '#c78435', key: 'suspend', value: 0 },
   { name: '终止', color: '#46F9FF', innerColor: '#1DD2D8', key: 'cancel', value: 0 },
   { name: '已完成', color: '#6DD400', innerColor: '#4A9400', key: 'completed', value: 0 }
 ]
@@ -924,7 +937,7 @@ export const pie2Config: Array<PieItem> = [
 export const pie3Config: Array<PieItem> = [
   { name: '正常', color: '#4E66FA', innerColor: '#3D55E8', key: 'normal', value: 0 },
   { name: '预警', color: '#FFD264', innerColor: '#BC9A48', key: 'warn', value: 0 },
-  { name: '延期', color: '#DF4949', innerColor: '#C94040', key: 'delay', value: 0 },
+  { name: '延期', color: '#F8A441', innerColor: '#c78435', key: 'delay', value: 0 },
 ]
 
 export const pie4Config = [

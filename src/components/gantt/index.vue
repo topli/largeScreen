@@ -31,7 +31,7 @@ const props = defineProps(['list', 'columns'])
 const legends = [
   { text: '未延期', color: '#6DD400'},
   { text: '将延期', color: '#FFAE12'},
-  { text: '延期', color: '#FF0000'},
+  { text: '延期', color: '#a80407FF'},
 ]
 
 const state = reactive({

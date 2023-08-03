@@ -83,8 +83,8 @@ const totalData = reactive<{
     { label: '区域在研项目数', value: '0', unit: ''},
     { label: '在研产品数', value: '0', unit: ''},
     { label: '区域客户数', value: '0', unit: ''},
-    { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
-    { label: '一次开发成功率', value: '0', unit: '%', color: '#6DD400'},
+    { label: '项目延期率', value: '0', unit: '%', color: 'rgba(243, 156, 51, 1)'},
+    { label: '一次开发成功率', value: '0', unit: '%', color: 'rgba(109, 212, 0, 1)'},
   ]
 })
 mapState.level = MAP_LEVEL.COUNTRY

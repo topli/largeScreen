@@ -44,14 +44,14 @@ const totalData = reactive<{
     { label: '当前区域', value: '0'},
     { label: '区域项目总数', value: '0', unit: ''},
     { label: '区域在研项目数', value: '0', unit: ''},
-    { label: '在研产品数', value: '0', unit: ''},
+    { label: '项目延期率', value: '0', unit: '%', color: 'rgba(243, 156, 51, 1)'},
+    { label: '一次开发成功率', value: '0', unit: '%', color: 'rgba(109, 212, 0, 1)'},
     { label: '区域客户数', value: '0', unit: ''},
-    { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
-    { label: '一次开发成功率', value: '0', unit: '%', color: '#6DD400'},
+    { label: '在研产品数', value: '0', unit: ''},
   ]
 })
 const gantt = reactive({
-  list: [],
+  list: [{designer: '11111', assess: { state: '完成', delay: '延期', cnt: 11}}],
   columns: columns
 })
 
@@ -87,10 +87,10 @@ const getProjectNumTotal = () => {
       if (reportData) {
         totalData.totalItems[1].value = reportData.project_num || 0
         totalData.totalItems[2].value = reportData.run_project || 0
-        totalData.totalItems[3].value = reportData.run_product || 0
-        totalData.totalItems[4].value = reportData.custom_num || 0
-        totalData.totalItems[5].value = reportData.project_delay_rate || 0
-        totalData.totalItems[6].value = reportData.once_product_rate || 0
+        totalData.totalItems[3].value = reportData.project_delay_rate || 0
+        totalData.totalItems[4].value = reportData.once_product_rate || 0
+        totalData.totalItems[5].value = reportData.custom_num || 0
+        totalData.totalItems[6].value = reportData.run_product || 0
       }
 
       pie1.map(item => {
@@ -123,9 +123,6 @@ const getList = () => {
 onMounted(() => {
   const { name } = route.query as any
   totalData.totalItems[0].value = name === 'china' || !name ? '全国' : name
-
-  console.log(totalData);
-  
   // 获取地图数据
   getProjectNumTotal()
   getList()

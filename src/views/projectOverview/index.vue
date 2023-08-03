@@ -59,7 +59,7 @@ import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL, TotalItem } from '@/constants/project'
-import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie, pathSymbols } from "@/constants/ecOptions"
+import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie, pathSymbols1, pathSymbols2 } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
 import { getMapData, getProjectOtherReport } from './service'
 // 获取所有地图边界数据
@@ -358,29 +358,31 @@ const getOtherReport = () => {
 
     // 处理领域数据
     if (sectorData && !_.isEmpty(sectorData)) {
-      const data: { [key: string]: any } = {
-        machine: { name: '飞机', icon: pathSymbols.plane },
-        elastic: { name: '导弹', icon: pathSymbols.plane },
-        ship: { name: '轮船', icon: pathSymbols.ship },
-        star: { name: '卫星', icon: pathSymbols.plane },
-        ground: { name: '地面', icon: pathSymbols.plane },
-        vehicle: { name: '车载', icon: pathSymbols.plane },
-        army: { name: '单兵', icon: pathSymbols.plane },
-        meter: { name: '仪器', icon: pathSymbols.plane },
-        replace: { name: '国产', icon: pathSymbols.plane }
+      const keys = Object.keys(sectorData)
+      const sortKeys = keys.sort((a, b) => {
+        return sectorData[a] - sectorData[b]
+      })
+      console.log(sortKeys);
+      
+      const labels: { [key: string]: any } = {
+        machine: '飞机',
+        elastic: '导弹' ,
+        ship: '轮船' ,
+        star: '卫星' ,
+        ground: '地面' ,
+        vehicle: '车载' ,
+        army: '单兵' ,
+        meter: '仪器' ,
+        replace: '国产' 
       }
       const series: any[] = []
-      Object.keys(data).forEach((key: string) => {
-        const item = data[key];
+      sortKeys.forEach((key: string, index: number) => {
         series.push({
-          name: item.name,
+          name: labels[key],
           value: sectorData[key],
-          symbol: 'image://' + pathSymbols[key],
+          symbol: 'image://' + (index % 2 === 0) ? pathSymbols2[key] : pathSymbols1[key],
           symbolSize: [24, 24]
         })
-      })
-      series.sort((a, b) => {
-        return a.value - b.value
       })
       console.log(series);
       ecOptions.domainAnalysisOptions.xAxis.data = series.map(item => item.name)

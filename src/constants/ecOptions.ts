@@ -1,20 +1,46 @@
 import * as echarts from 'echarts'
-import plane from '@/assets/images/plane.png'
-import missile from '@/assets/images/missile.png'
-import train from '@/assets/images/train.png'
-import ship from '@/assets/images/ship.png'
-import car from '@/assets/images/car.png'
-import satellite from '@/assets/images/satellite.png'
-import radar from '@/assets/images/radar.png'
+import army_1 from '@/assets/images/army_1.png'
+import elastic_1 from '@/assets/images/elastic_1.png'
+import ground_1 from '@/assets/images/ground_1.png'
+import machine_1 from '@/assets/images/machine_1.png'
+import meter_1 from '@/assets/images/meter_1.png'
+import replace_1 from '@/assets/images/replace_1.png'
+import ship_1 from '@/assets/images/ship_1.png'
+import star_1 from '@/assets/images/star_1.png'
+import vehicle_1 from '@/assets/images/vehicle_1.png'
 
-export const pathSymbols: { [key: string]: any } = {
-  plane: plane,
-  missile: missile,
-  train: train,
-  ship: ship,
-  car: car,
-  satellite: satellite,
-  radar: radar,
+
+import army_2 from '@/assets/images/army_2.png'
+import elastic_2 from '@/assets/images/elastic_2.png'
+import ground_2 from '@/assets/images/ground_2.png'
+import machine_2 from '@/assets/images/machine_2.png'
+import meter_2 from '@/assets/images/meter_2.png'
+import replace_2 from '@/assets/images/replace_2.png'
+import ship_2 from '@/assets/images/ship_2.png'
+import star_2 from '@/assets/images/star_2.png'
+import vehicle_2 from '@/assets/images/vehicle_2.png'
+
+export const pathSymbols1: { [key: string]: any } = {
+  army: army_1,
+  elastic: elastic_1,
+  ground: ground_1,
+  ship: ship_1,
+  machine: machine_1,
+  meter: meter_1,
+  replace: replace_1,
+  star: star_1,
+  vehicle: vehicle_1,
+}
+export const pathSymbols2: { [key: string]: any } = {
+  army: army_2,
+  elastic: elastic_2,
+  ground: ground_2,
+  ship: ship_2,
+  machine: machine_2,
+  meter: meter_2,
+  replace: replace_2,
+  star: star_2,
+  vehicle: vehicle_2,
 }
 export const projectStatusPie = function () {
   return {
@@ -595,7 +621,6 @@ export const areaStatisticsOptions = function () {
     yAxis: [
       {
         type: "value",
-        minInterval: 1,
         splitLine: {
           show: false,
         },
@@ -825,37 +850,47 @@ export const domainAnalysisOptions = function () {
         data: [
           {
             value: 123,
-            symbol: 'image://' + pathSymbols.plane,
+            symbol: 'image://' + pathSymbols1.army,
             symbolSize: [24, 24]
           },
           {
             value: 60,
-            symbol: 'image://' + pathSymbols.missile,
+            symbol: 'image://' + pathSymbols2.elastic,
             symbolSize: [24, 24]
           },
           {
             value: 18,
-            symbol: 'image://' + pathSymbols.train,
+            symbol: 'image://' + pathSymbols1.ground,
             symbolSize: [24, 24]
           },
           {
             value: 12,
-            symbol: 'image://' + pathSymbols.ship,
+            symbol: 'image://' + pathSymbols2.ship,
             symbolSize: [24, 24]
           },
           {
             value: 9,
-            symbol: 'image://' + pathSymbols.car,
+            symbol: 'image://' + pathSymbols1.machine,
             symbolSize: [24, 24]
           },
           {
             value: 2,
-            symbol: 'image://' + pathSymbols.satellite,
+            symbol: 'image://' + pathSymbols2.meter,
             symbolSize: [24, 24]
           },
           {
             value: 1,
-            symbol: 'image://' + pathSymbols.radar,
+            symbol: 'image://' + pathSymbols1.replace,
+            symbolSize: [24, 24]
+          },
+          {
+            value: 1,
+            symbol: 'image://' + pathSymbols2.star,
+            symbolSize: [24, 24]
+          },
+          {
+            value: 1,
+            symbol: 'image://' + pathSymbols1.vehicle,
             symbolSize: [24, 24]
           }
         ]

@@ -1,10 +1,10 @@
 <template>
   <div class="person-tree-node">
-    <div v-if="props.title" class="group-title">
-      {{ props.title }}
+    <div v-if="title" class="group-title" @click="selectNode()">
+      {{ title }}
     </div>
     <div class="person-info-wrapper" v-if="expanded">
-      <div class="person-info-item" v-for="item in props.persons" :key="item.id">
+      <div class="person-info-item" v-for="item in members" :key="item.id" @click="selectNode(item)">
         <i class="avatar" :style="randomColor()">{{ sortName(item.name) }}</i>
         <span class="name">{{ item.name }}</span>
       </div>
@@ -13,9 +13,40 @@
 </template>
 
 <script setup lang='ts'>
-const props = defineProps(['title', 'persons', 'expanded'])
+import { generateUUID } from '@/libs/utils';
+import { computed } from 'vue';
+
+const props = defineProps(['node', 'expanded'])
+const emit = defineEmits(['selectNode'])
+
 const colors = ['#009DFF', '#8080FF', '#00807F', '#F09822', '#80BD20', '#00D1FF']
 
+const title = computed(() => {
+  if (props.node.level === 1) {
+    return props.node.department_name
+  } else {
+    return props.node.group_name
+  }
+})
+
+const members = computed(() => {
+  if (props.node.level === 1) {
+    return [
+      { name: props.node.depat_leader_name, type: 'master' }
+    ]
+  } else {
+    const members = props.node.members.map((item: any) => {
+      item.name = item.display_name
+      return item
+    })
+    return [{ name: props.node.group_leader_name, id: generateUUID(), type: 'master' }, ...members]
+  }
+})
+
+const selectNode = (item?: any) => {
+  if (item && item.type === 'master') return
+  emit('selectNode', item || props.node)
+}
 
 const randomColor = (): any => { return { 'background': colors[Math.floor(Math.random() * 7)] } }
 

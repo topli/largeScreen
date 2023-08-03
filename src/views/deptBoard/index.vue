@@ -26,7 +26,7 @@
       <div class="dept-gantt-table" v-show="!selectTarget">
         <Gantt :list="gantt.list" :columns="gantt.columns"></Gantt>
       </div>
-      <PersonTree v-show="selectTarget"></PersonTree>
+      <PersonTree v-show="selectTarget" :data="members" @select-node="selectNode"></PersonTree>
     </div>
   </LargeScreenMain>
 </template>
@@ -46,20 +46,22 @@ import { setPieData } from "@/libs/utils/ehcarts";
 import { TotalItem } from "@/constants/project";
 import { useRoute } from "vue-router";
 import _ from "lodash";
-import { getReportDataByCond } from "./service";
+import { getReportDataByCond, getMemberRelateData } from "./service";
 import { columns } from "@/constants/common";
 import { getReportDataList } from "../projectBoard/service";
 // import { getProjectOtherReport } from "../projectOverview/service";
 
 const route = useRoute()
 
+const selectTargetFun =  () => { selectTarget.value = !selectTarget.value }
+
 const totalData = reactive<{
   totalItems: Array<TotalItem>
 }>({
   totalItems: [
-    { label: '当前区域', value: '未知', click: () => { selectTarget.value = !selectTarget.value }},
-    { label: '当前组别', value: ''},
-    { label: '当前设计师', value: ''},
+    { label: '当前区域', value: '未知', click: selectTargetFun },
+    { label: '当前组别', value: '', click: selectTargetFun },
+    { label: '当前设计师', value: '', click: selectTargetFun },
     { label: '当前项目总数', value: '0'},
     { label: '当前在研项目数', value: '0'},
     { label: '项目延期率', value: '0', unit: '%', color: '#FF0000'},
@@ -261,6 +263,8 @@ onMounted(() => {
   getProjectNumTotal()
   // getOtherReport()
   getList()
+
+  getMembers()
 })
 
 const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
@@ -269,13 +273,16 @@ const pie3: Array<PieItem> = _.cloneDeep(pie3Config)
 
 const getProjectNumTotal = () => {
   let type = 1
-  const { name } = route.query as any
+  let name = ''
   if (totalData.totalItems[2].value) {
     type = 3
+    name = totalData.totalItems[2].value
   } else if (totalData.totalItems[1].value) {
     type = 2
+    name = totalData.totalItems[1].value
   } else if (totalData.totalItems[0].value) {
     type = 1
+    name = totalData.totalItems[0].value
   }
   getReportDataByCond({type, value: name})
     .then(res => {
@@ -337,62 +344,43 @@ const getProjectNumTotal = () => {
 
     })
 }
-// const getOtherReport = () => {
-//   getProjectOtherReport().then(res => {
-//     const { processData } = res.data || {}
-//     // 处理节点进程数据
-//     if (processData && !_.isEmpty(processData)) {
-//       const xData = []
-//       const legend = ['评估', '方案', '设计', '流片', '测试', '送样', '标准']
-//       const data: any = [[], [], [], [], [], [], []]
-
-//       const series = []
-//       for (let i = 0; i < processData.length; i++) {
-//         const item = processData[i];
-//         xData.push(item.text)
-//         data[0].push(item.value?.assess)
-//         data[1].push(item.value?.plan)
-//         data[2].push(item.value?.design)
-//         data[3].push(item.value?.respin)
-//         data[4].push(item.value?.test)
-//         data[5].push(item.value?.sample)
-//         data[6].push(item.value?.standar)
-//       }
-//       for (let i = 0; i < legend.length; i++) {
-//         const leg = legend[i];
-//         series.push(
-//           {
-//             name: leg,
-//             type: "line",
-//             stack: "Total",
-//             smooth: true,
-//             lineStyle: {
-//               width: 2,
-//             },
-//             showSymbol: false,
-//             data: data[i],
-//           }
-//         )
-//       }
-//       ecOptions.projectProgressOptions.legend.data = legend
-//       ecOptions.projectProgressOptions.xAxis[0].data = xData
-//       ecOptions.projectProgressOptions.series = series
-//     }
-//   })
-// }
 const getList = () => {
   let type = 4
-  const { name } = route.query as any
+  let name = ''
   if (totalData.totalItems[2].value) {
     type = 6
+    name = totalData.totalItems[2].value
   } else if (totalData.totalItems[1].value) {
     type = 5
+    name = totalData.totalItems[1].value
   } else if (totalData.totalItems[0].value) {
     type = 4
+    name = totalData.totalItems[0].value
   }
   getReportDataList({type, value: name}).then(res => {
     gantt.list = res.data.value
   })
+}
+
+const members = ref()
+const getMembers = () => {
+  getMemberRelateData().then(res => {
+    members.value = res.data
+  })
+}
+
+const reloadData = () => {
+  getProjectNumTotal()
+  getList()
+}
+
+const selectNode = (path: any) => {
+  const [first, second, third] = path
+  totalData.totalItems[0].value = first ? first.department_name : ''
+  totalData.totalItems[1].value = second ? second.group_name : ''
+  totalData.totalItems[2].value = third ? third.display_name : ''
+  selectTarget.value = false
+  reloadData()
 }
 
 

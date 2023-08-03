@@ -9,3 +9,11 @@ export const getReportDataByCond = (params: any): Promise<AxiosResponse<any, any
     params
   });
 }
+
+// 科室人员数据
+export const getMemberRelateData = (): Promise<AxiosResponse<any, any>> => {
+  return request({
+    method: "GET",
+    url: "/api/mission-vnext/BI-report/getMemberRelateData"
+  });
+}

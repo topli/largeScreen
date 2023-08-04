@@ -14,11 +14,11 @@
         <Echarts style="height: 10rem;width: 15rem;" :options="ecOptions.projectStatusPie1"></Echarts>
         <Echarts style="height: 10rem;width: 15rem;" :options="ecOptions.projectStatusPie2"></Echarts>
         <Echarts style="height: 10rem;width: 15rem;" :options="ecOptions.projectStatusPie3"></Echarts>
-        <div class="project-status-title">
+        <div class="project-status-title" v-if="query.type != 7">
           <span>科室项目</span>
           <span>组别分布</span>
         </div>
-        <Echarts style="height: 10rem;width: 22rem;" :options="ecOptions.projectStatusPie4"></Echarts>
+        <Echarts v-if="query.type != 7" style="height: 10rem;width: 22rem;" :options="ecOptions.projectStatusPie4"></Echarts>
       </div>
       <ScreenCard title="科室项目分布" v-show="!selectTarget && query.type != 7">
         <Echarts style="height: 10rem" :options="ecOptions.deptProjectOptions"></Echarts>
@@ -67,7 +67,7 @@ const deptTotalItems: Array<TotalItem> = [
   ]
 
 const domainTotalItems: Array<TotalItem> = [
-    { label: '当前领域', value: '未知', click: selectTargetFun },
+    { label: '当前领域', value: '未知' },
     { label: '当前项目总数', value: '0'},
     { label: '当前在研项目数', value: '0'},
     { label: '项目延期率', value: '0', unit: '%', color: 'rgba(243, 156, 51, 1)'},
@@ -261,9 +261,9 @@ const ecOptions = reactive({
   deptProjectOptions: areaStatisticsOptions(),
 })
 
-setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
-setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
-setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目总数状态分布`)
+setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目紧急度分布`)
+setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目预警状态分布`)
 setPieData(ecOptions.projectStatusPie4, pie4Config)
 ecOptions.projectStatusPie4.series[0].center = ['30%', '50%'];
 ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
@@ -346,9 +346,9 @@ const getProjectNumTotal = () => {
         item.value = project_warn_state[item.key] || 0
       })
       // 设置饼图数据
-      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
-      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
-      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
+      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目总数状态分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目紧急度分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目预警状态分布`)
       
       const pie4Keys = Object.keys(group_stat)
       const pie4Color = [['#6DD400', '#4A9400'], ['#4E66FA', '#3D55E8'], ['#46F9FF', '#1DD2D8']]

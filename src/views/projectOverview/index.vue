@@ -115,9 +115,9 @@ const initData = () => {
     // 领域分布点击事件
     domainAnalysisRef.value.getEcIns().on('click', domainAnalysisClick)
     // 设置饼图数据
-    setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
-    setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
-    setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+    setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目总数状态分布`)
+    setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目紧急度分布`)
+    setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目预警状态分布`)
 }
 
 const resize = () => {
@@ -303,9 +303,9 @@ const getProjectNumTotal = (areaName?: string) => {
       
       renderMap(areaName || 'china', projectMapData)
       // 设置饼图数据
-      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
-      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
-      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
+      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目总数状态分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目紧急度分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目预警状态分布`)
     })
     .catch(() => {
       renderMap(areaName || 'china', [])

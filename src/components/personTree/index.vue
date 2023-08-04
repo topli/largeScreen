@@ -656,7 +656,14 @@ const getTreeNodePath = (nodes: any, node: any): any[] => {
         const item = nodes[i];
         const children = item.children || item.groups || item.members
         path[level] = item
+        console.log('-------------------------');
+        
+        console.log(item.key);
+        console.log(node.key);
+        console.log(item.key === node.key);
+        console.log('-------------------------');
         if (item.key === node.key) {
+          console.log(item);
           findStatus = true
           break;
         } else if (children && children.length) {
@@ -666,6 +673,8 @@ const getTreeNodePath = (nodes: any, node: any): any[] => {
     }
   }
   findNode(nodes, node, 0)
+  console.log(path);
+  
   return path
 }
 

@@ -31,7 +31,6 @@ const title = computed(() => {
 })
 
 const members = computed(() => {
-  console.log('props.node', props.node);
   if (props.node.level === 1) {
     return [
       { name: props.node.department_leader_name, type: 'master' }

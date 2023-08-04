@@ -3,7 +3,7 @@ export const columns = [
     title: '设计师',
     dataIndex: 'designer',
     key: 'designer',
-    width: 120
+    width: 100
   },
   {
     title: '项目背景',
@@ -15,7 +15,7 @@ export const columns = [
     title: '产品名称',
     dataIndex: 'product_name',
     key: 'product_name',
-    width: 120
+    width: 200
   },
   {
     title: '单位简称',

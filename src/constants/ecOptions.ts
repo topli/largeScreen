@@ -47,15 +47,14 @@ export const projectStatusPie = function () {
     tooltip: {
         trigger: 'item',
         formatter: "{b}: {c} ({d}%)",
-
     },
     grid: {
       left: 0
     },
     title: {
-        text: '在研项目\n紧急度\n分布',
+        text: '在研项目紧急度分布',
         left: 'center',
-        top: '30%',
+        top: '-20',
         padding: [24, 0],
         textStyle: {
           color: '#fff',
@@ -82,7 +81,7 @@ export const projectStatusPie = function () {
         type: 'pie',
         hoverAnimation: false,
         legendHoverLink: false,
-        radius: ['40%', '50%'],
+        radius: ['35%', '45%'],
         center: ['50%', '50%'],
         label: {
           show: false,
@@ -125,7 +124,7 @@ export const projectStatusPie = function () {
       {
         name: '',
         type: 'pie',
-        radius: ['50%', '70%'],
+        radius: ['45%', '65%'],
         center: ['50%', '50%'],
         labelLine: {
           show: false,

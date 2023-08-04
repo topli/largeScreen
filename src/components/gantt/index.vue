@@ -3,7 +3,7 @@
     <a-table :dataSource="props.list" :columns="props.columns" :pagination="false" :scroll="{y: `${state.tableHeight}`}">
       <template #bodyCell="{ column, record }">
         <template v-if="column.type === 'node_status'">
-          <Legends :items="legends" v-model="record[column.key]"></Legends>
+          <Legends :items="legends" v-model="record[column.key]" :key="record.designer + column.key"></Legends>
         </template>
       </template>
     </a-table>

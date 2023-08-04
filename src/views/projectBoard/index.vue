@@ -60,9 +60,9 @@ const ecOptions = reactive({
   projectStatusPie2: projectStatusPie(),
   projectStatusPie3: projectStatusPie()
 })
-setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
-setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
-setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目\n预警状态\n分布`)
+setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目总数状态分布`)
+setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目紧急度分布`)
+setPieData(ecOptions.projectStatusPie3, pie3Config, `在研项目预警状态分布`)
 
 const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
 const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
@@ -103,9 +103,9 @@ const getProjectNumTotal = () => {
         item.value = reportData.project_warn_state[item.key] || 0
       })
       // 设置饼图数据
-      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目\n总数状态\n分布`)
-      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目\n紧急度\n分布`)
-      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
+      setPieData(ecOptions.projectStatusPie1, pie1, `区域项目总数状态分布`)
+      setPieData(ecOptions.projectStatusPie2, pie2, `在研项目紧急度分布`)
+      setPieData(ecOptions.projectStatusPie3, pie3, `在研项目预警状态分布`)
     })
 }
 

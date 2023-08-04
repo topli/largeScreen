@@ -3,15 +3,15 @@
     <template v-if="type === 'easy'">
       <div :key="leg.text" v-for="leg in items" class="legend-easy" :style="{background: leg.color}">{{ leg.text }}</div>
     </template>
-    <div class="legend-cell" v-else-if="props.modelValue">
+    <div class="legend-cell" v-else-if="props.modelValue && !isEmpty">
       <div class="legend-cell-bg" :style="{background: findItem.color}"></div>
       <div class="legend-cell-value" :style="{background: findItem.color}">
         {{  props.modelValue.cnt }}  
       </div>
       <div class="legend-cell-text">
         <a-tooltip>
-          <template #title>{{ props.modelValue.start_time + '-' + props.modelValue.end_time }}</template>
-          {{ props.modelValue.state + '/' + props.modelValue.delay }}
+          <template #title>{{ dateRange }}</template>
+          {{ statusText }}
         </a-tooltip>
       </div>
     </div>
@@ -20,10 +20,13 @@
 
 <script setup lang='ts'>
 import _ from 'lodash';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { unixDate } from '@/libs/filters'
 
 const props = defineProps(['items', 'modelValue', 'type'])
 const findItem = ref<any>({})
+
+const isEmpty = _.isEmpty(props.modelValue)
 
 if (props.items && props.items.length && props.modelValue) {
   findItem.value = props.items.find((item: any) => {
@@ -31,6 +34,15 @@ if (props.items && props.items.length && props.modelValue) {
   })
 }
 
+const dateRange = computed(() => {
+  return (props.modelValue.start_time ? unixDate(props.modelValue.start_time) : '')
+    + ' 至 '
+    + (props.modelValue.end_time ? unixDate(props.modelValue.end_time) : '')
+})
+
+const statusText = computed(() => {
+  return (props.modelValue.state || '') + '/' + (props.modelValue.delay || '')
+})
 </script>
 <style scoped lang='scss'>
 @import '@/styles/mixins/common.scss';

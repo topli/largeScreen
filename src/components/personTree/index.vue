@@ -1,11 +1,13 @@
 <template>
   <div class="person-tree-wrapper">
-    <a-tree :show-icon="showIcon" :selectable="false" :default-expanded-keys="defExpand" :tree-data="treeData"
+    <div class="person-tree-scroll">
+      <a-tree :show-icon="showIcon" :selectable="false" :default-expanded-keys="defExpand" :tree-data="treeData"
       @select="onSelect">
       <template #title="{ dataRef, expanded }">
         <Node :node="dataRef" :expanded="expanded" @select-node="selectNode"></Node>
       </template>
     </a-tree>
+    </div>
   </div>
 </template>
 
@@ -40,45 +42,630 @@ const selectNode = (item: any) => {
   emit('selectNode', path)
 }
 
-setTimeout(() => {
-  treeData.value = hanlderTreeData([{
-    key: '',
-    department_name: "11",
-    depat_leader_name: "管理员",
-    groups: [
-      {
-        group_name: "ssss组",
-        group_leader_name: "管理员",
-        members: [
-          {
-            uid: 12344444,
-            display_name: "管理员"
-          }
-        ]
-      }
-    ]
-  }], 0)
-}, 1000)
+// setTimeout(() => {
+//   treeData.value = hanlderTreeData([{
+//     key: '',
+//     department_name: "444",
+//     department_leader_name: "不合格审理人员",
+//     groups: [
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+      
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       }
+//     ]
+//   },
+//   {
+//     key: '',
+//     department_name: "444",
+//     department_leader_name: "不合格审理人员",
+//     groups: [
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 987651651111146854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+      
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       },
+//       {
+//         group_name: "放大类功能电器组",
+//         group_leader_name: "管理员",
+//         members: [
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子一"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子二"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           },
+//           {
+//             uid: 9876516546854,
+//             display_name: "李子三"
+//           }
+//         ]
+//       }
+//     ]
+//   }], 0)
+//   console.log(treeData.value);
+  
+// }, 1000)
 
 const getTreeNodePath = (nodes: any, node: any): any[] => {
-  const path: any[] = []
-  const findNode = (nodes: TreeProps['treeData'], node: any, parent?: any) => {
-    if (!!parent) path.push(parent)
+  let path: any[] = []
+  let findStatus = false
+  const findNode = (nodes: TreeProps['treeData'], node: any, level: number) => {
+    console.log(level);
+    
+    if (findStatus) return
     if (nodes && nodes.length) {
       for (let i = 0; i < nodes.length; i++) {
+        if (findStatus) break;
         const item = nodes[i];
-        const children = item.children
-        
+        const children = item.children || item.groups || item.members
+        path[level] = item
         if (item.key === node.key) {
-          path.push(node)
+          findStatus = true
           break;
         } else if (children && children.length) {
-          findNode(children, node, item)
+          findNode(children, node, level + 1)
         }
       }
     }
   }
-  findNode(nodes, node)
+  findNode(nodes, node, 0)
   return path
 }
 
@@ -88,8 +675,13 @@ const hanlderTreeData = (node: any, level: number) => {
     return node.map((item: any) => {
       item.key = generateUUID()
       item.level = level
-      if (item.groups || item.members) {
+      if ((item.groups || item.members) && level < 2) {
         item.children = hanlderTreeData(item.groups || item.members, level)
+      }
+      if (level === 2) {
+        item.members.map((item: any) => {
+          item.key = generateUUID()
+        })
       }
       return item
     })
@@ -105,6 +697,15 @@ watch(() => props.data, (val) => {
 </script>
 <style scoped lang='scss'>
 .person-tree-wrapper {
+  overflow: hidden;
+  .person-tree-scroll {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    &:hover {
+      overflow: auto;
+    }
+  }
   :deep(.ant-tree) {
     color: #C8D3D8;
     background-color: transparent;

@@ -53,12 +53,9 @@ import { getReportDataList } from "../projectBoard/service";
 
 const route = useRoute()
 
-const selectTargetFun =  () => { selectTarget.value = !selectTarget.value }
+const selectTargetFun = () => { selectTarget.value = !selectTarget.value }
 
-const totalData = reactive<{
-  totalItems: Array<TotalItem>
-}>({
-  totalItems: [
+const deptTotalItems: Array<TotalItem> = [
     { label: '当前区域', value: '未知', click: selectTargetFun },
     { label: '当前组别', value: '', click: selectTargetFun },
     { label: '当前设计师', value: '', click: selectTargetFun },
@@ -68,6 +65,21 @@ const totalData = reactive<{
     { label: '一次开发成功率', value: '0', unit: '%', color: 'rgba(109, 212, 0, 1)'},
     { label: '在研产品数', value: '0'},
   ]
+
+const domainTotalItems: Array<TotalItem> = [
+    { label: '当前领域', value: '未知', click: selectTargetFun },
+    { label: '当前项目总数', value: '0'},
+    { label: '当前在研项目数', value: '0'},
+    { label: '项目延期率', value: '0', unit: '%', color: 'rgba(243, 156, 51, 1)'},
+    { label: '一次开发成功率', value: '0', unit: '%', color: 'rgba(109, 212, 0, 1)'},
+    { label: '在研产品数', value: '0'},
+  ]
+
+
+const totalData = reactive<{
+  totalItems: Array<TotalItem>
+}>({
+  totalItems: []
 })
 
 const gantt = reactive({
@@ -256,10 +268,18 @@ setPieData(ecOptions.projectStatusPie4, pie4Config)
 ecOptions.projectStatusPie4.series[0].center = ['30%', '50%'];
 ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
 
-
+let query: any = {}
 onMounted(() => {
-  const { name } = route.query as any
-  totalData.totalItems[0].value = name
+  query = route.query as any
+
+  if (query.type == 7) {
+    totalData.totalItems = domainTotalItems
+  } else {
+    totalData.totalItems = deptTotalItems
+  }
+
+  totalData.totalItems[0].value = query.name
+
   getProjectNumTotal()
   // getOtherReport()
   getList()
@@ -271,19 +291,32 @@ const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
 const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
 const pie3: Array<PieItem> = _.cloneDeep(pie3Config)
 
-const getProjectNumTotal = () => {
-  let type = 1
+const getParams = (types: Array<number>) => {
+  let type = 0
   let name = ''
-  if (totalData.totalItems[2].value) {
-    type = 3
-    name = totalData.totalItems[2].value
-  } else if (totalData.totalItems[1].value) {
-    type = 2
-    name = totalData.totalItems[1].value
-  } else if (totalData.totalItems[0].value) {
-    type = 1
-    name = totalData.totalItems[0].value
+  if (query.type == 7) {
+    type = types[3]
+    name = totalData.totalItems[0].value as string
+  } else {
+    if (totalData.totalItems[2].value) {
+      type = types[2]
+      name = totalData.totalItems[2].value
+    } else if (totalData.totalItems[1].value) {
+      type = types[1]
+      name = totalData.totalItems[1].value
+    } else if (totalData.totalItems[0].value) {
+      type = types[0]
+      name = totalData.totalItems[0].value
+    }
   }
+  return {
+    type,
+    name
+  }
+}
+
+const getProjectNumTotal = () => {
+  const { type, name } = getParams([1,2,3,4])
   getReportDataByCond({type, value: name})
     .then(res => {
       const {project_num, run_project, project_delay_rate, once_product_rate, run_product,project_state, project_urgent_state, project_warn_state, designer_stat, group_stat } = res.data || {}
@@ -345,18 +378,7 @@ const getProjectNumTotal = () => {
     })
 }
 const getList = () => {
-  let type = 4
-  let name = ''
-  if (totalData.totalItems[2].value) {
-    type = 6
-    name = totalData.totalItems[2].value
-  } else if (totalData.totalItems[1].value) {
-    type = 5
-    name = totalData.totalItems[1].value
-  } else if (totalData.totalItems[0].value) {
-    type = 4
-    name = totalData.totalItems[0].value
-  }
+  const { type, name } = getParams([4,5,6,7])
   getReportDataList({type, value: name}).then(res => {
     gantt.list = res.data.value
   })
@@ -376,6 +398,7 @@ const reloadData = () => {
 
 const selectNode = (path: any) => {
   const [first, second, third] = path
+  
   totalData.totalItems[0].value = first ? first.department_name : ''
   totalData.totalItems[1].value = second ? second.group_name : ''
   totalData.totalItems[2].value = third ? third.display_name : ''
@@ -440,6 +463,13 @@ const selectTarget = ref(false)
         .ant-table-wrapper {
           height: calc(100% - 4rem);
         }
+      }
+    }
+
+    .person-tree-wrapper {
+      flex: 1;
+      .ant-tree {
+        height: 100%;
       }
     }
   }

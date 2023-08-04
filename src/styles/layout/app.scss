@@ -12,3 +12,20 @@ body {
 *, ::before, ::after{
   box-sizing: border-box;
 }
+
+/*里面的代码可以根据自己需求去进行更改*/
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #3735358a;
+}
+::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e775;
+}
+::-webkit-scrollbar-corner{
+  background-color: transparent;
+}

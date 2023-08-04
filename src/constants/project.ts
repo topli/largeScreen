@@ -9,5 +9,6 @@ export interface TotalItem {
   value?: string,
   unit?: string,
   color?: string,
+  hide?: boolean,
   click?: Function
 }

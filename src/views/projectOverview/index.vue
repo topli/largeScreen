@@ -40,7 +40,7 @@
           <Echarts style="height: 23rem" :options="ecOptions.areaStatisticsOptions"></Echarts>
         </ScreenCard>
         <ScreenCard title="领域分布">
-          <Echarts style="height: 23rem" :options="ecOptions.domainAnalysisOptions"></Echarts>
+          <Echarts ref="domainAnalysisRef" style="height: 23rem" :options="ecOptions.domainAnalysisOptions"></Echarts>
         </ScreenCard>
       </div>
     </div>
@@ -110,8 +110,10 @@ const initMap = () => {
 }
 
 const initData = () => {
-    // 点图点击事件
+    // 科室项目分布点击事件
     deptProjectRef.value.getEcIns().on('click', deptProjectClick)
+    // 领域分布点击事件
+    domainAnalysisRef.value.getEcIns().on('click', domainAnalysisClick)
     // 设置饼图数据
     setPieData(ecOptions.projectStatusPie1, pie1Config, `区域项目\n总数状态\n分布`)
     setPieData(ecOptions.projectStatusPie2, pie2Config, `在研项目\n紧急度\n分布`)
@@ -208,10 +210,17 @@ const toDetail = () => {
 const deptProjectRef = ref()
 
 const deptProjectClick = (params: any) => {
-  // cur_level 当前区域类型   0国 1省 2市
-  const routeData = routerIns.resolve({ path: '/deptBoard', query: { ...params } });
+  const routeData = routerIns.resolve({ path: '/deptBoard', query: { type: 4, name: params.name } });
   window.open(routeData.href, '_blank');
 }
+
+const domainAnalysisRef = ref()
+
+const domainAnalysisClick = (params: any) => {
+  const routeData = routerIns.resolve({ path: '/deptBoard', query: { type: 7, name: params.name } });
+  window.open(routeData.href, '_blank');
+}
+
 const pie1: Array<PieItem> = _.cloneDeep(pie1Config)
 const pie2: Array<PieItem> = _.cloneDeep(pie2Config)
 const pie3: Array<PieItem> = _.cloneDeep(pie3Config)

@@ -3,7 +3,7 @@
     <div v-if="title" class="group-title" @click="selectNode()">
       {{ title }}
     </div>
-    <div class="person-info-wrapper" v-if="expanded">
+    <div class="person-info-wrapper">
       <div class="person-info-item" v-for="item in members" :key="item.id" @click="selectNode(item)">
         <i class="avatar" :style="randomColor()">{{ sortName(item.name) }}</i>
         <span class="name">{{ item.name }}</span>
@@ -22,6 +22,7 @@ const emit = defineEmits(['selectNode'])
 const colors = ['#009DFF', '#8080FF', '#00807F', '#F09822', '#80BD20', '#00D1FF']
 
 const title = computed(() => {
+  
   if (props.node.level === 1) {
     return props.node.department_name
   } else {
@@ -30,9 +31,10 @@ const title = computed(() => {
 })
 
 const members = computed(() => {
+  console.log('props.node', props.node);
   if (props.node.level === 1) {
     return [
-      { name: props.node.depat_leader_name, type: 'master' }
+      { name: props.node.department_leader_name, type: 'master' }
     ]
   } else {
     const members = props.node.members.map((item: any) => {
@@ -50,7 +52,9 @@ const selectNode = (item?: any) => {
 
 const randomColor = (): any => { return { 'background': colors[Math.floor(Math.random() * 7)] } }
 
-const sortName = (fullName: string) => fullName.substring(0, 2)
+const sortName = (fullName: string) => {
+ return fullName ? fullName.substring(0, 2) : ''
+}
 </script>
 <style scoped lang='scss'>
 @import '@/styles/mixins/common.scss';

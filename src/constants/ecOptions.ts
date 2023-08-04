@@ -733,7 +733,8 @@ export const areaStatisticsOptions = function () {
     ],
   }
 }
-const linearGradient1 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+// 领域渐变色
+export const linearGradient1 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
   {
     offset: 0,
     color: 'rgba(0,241,255,0)'
@@ -743,8 +744,8 @@ const linearGradient1 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
     color: '#00F1FF'
   }
 ])
-
-const linearGradient2 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+// 领域渐变色
+export const linearGradient2 = new echarts.graphic.LinearGradient(0, 1, 0, 0, [
   {
     offset: 0,
     color: 'rgba(109,212,0,0)'

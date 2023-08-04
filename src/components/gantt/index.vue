@@ -42,8 +42,9 @@ const elRef = ref()
 const resize = () => {
   setTimeout(() => {
     const height = elRef.value.clientHeight
+    
     state.tableHeight = height - (Number(document.documentElement.style.fontSize.replace('px', '')) * 4) - 35 + 'px'
-  });
+  }, 100);
 }
 onMounted(() => {
   resize()

@@ -59,7 +59,7 @@ import { useRouter } from 'vue-router'
 import * as echarts from "echarts"
 import chinaData from "@/assets/geo/china.json"
 import { MAP_LEVEL, TotalItem } from '@/constants/project'
-import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie, pathSymbols1, pathSymbols2 } from "@/constants/ecOptions"
+import { areaStatisticsOptions, deptProjectOptions, domainAnalysisOptions, pie1Config, pie2Config, pie3Config, PieItem, projectMapOptions, projectProgressOptions, projectStatusPie, pathSymbols1, pathSymbols2, linearGradient1, linearGradient2 } from "@/constants/ecOptions"
 import { setPieData } from "@/libs/utils/ehcarts"
 import { getMapData, getProjectOtherReport } from './service'
 // 获取所有地图边界数据
@@ -367,36 +367,45 @@ const getOtherReport = () => {
 
     // 处理领域数据
     if (sectorData && !_.isEmpty(sectorData)) {
-      const keys = Object.keys(sectorData)
-      const sortKeys = keys.sort((a, b) => {
-        return sectorData[a] - sectorData[b]
-      })
-      console.log(sortKeys);
-      
-      const labels: { [key: string]: any } = {
-        machine: '飞机',
-        elastic: '导弹' ,
-        ship: '轮船' ,
-        star: '卫星' ,
-        ground: '地面' ,
-        vehicle: '车载' ,
-        army: '单兵' ,
-        meter: '仪器' ,
-        replace: '国产' 
-      }
-      const series: any[] = []
-      sortKeys.forEach((key: string, index: number) => {
-        series.push({
-          name: labels[key],
-          value: sectorData[key],
-          symbol: 'image://' + (index % 2 === 0) ? pathSymbols2[key] : pathSymbols1[key],
-          symbolSize: [24, 24]
+        const keys = Object.keys(sectorData)
+        const sortKeys = keys.sort((a, b) => {
+          return sectorData[b] - sectorData[a]
         })
-      })
-      console.log(series);
-      ecOptions.domainAnalysisOptions.xAxis.data = series.map(item => item.name)
-      ecOptions.domainAnalysisOptions.series = series
+        
+        const labels: { [key: string]: any } = {
+          machine: '飞机',
+          elastic: '导弹' ,
+          ship: '轮船' ,
+          star: '卫星' ,
+          ground: '地面' ,
+          vehicle: '车载' ,
+          army: '单兵' ,
+          meter: '仪器' ,
+          replace: '国产' 
+        }
+        const seriesData: any[] = [[], []]
+        const xData: any[] = []
+        sortKeys.forEach((key: string, index: number) => {
+          xData.push(labels[key])
+          seriesData[0].push({
+            value: sectorData[key],
+            itemStyle: {
+              color: index % 2 === 0 ? linearGradient1 : linearGradient2
+            }
+          })
+          seriesData[1].push({
+            name: labels[key],
+            value: sectorData[key],
+            symbol: 'image://' + ((index % 2 === 0) ? pathSymbols1[key] : pathSymbols2[key]),
+            symbolSize: [24, 24]
+          })
+        })
+        console.log(seriesData);
+        ecOptions.domainAnalysisOptions.xAxis.data = xData
+        ecOptions.domainAnalysisOptions.series[0].data = seriesData[0]
+        ecOptions.domainAnalysisOptions.series[1].data = seriesData[1]
     }
+  }).catch(() => {
   })
 }
 

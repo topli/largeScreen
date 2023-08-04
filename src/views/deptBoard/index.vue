@@ -20,7 +20,7 @@
         </div>
         <Echarts style="height: 10rem;width: 22rem;" :options="ecOptions.projectStatusPie4"></Echarts>
       </div>
-      <ScreenCard title="科室项目分布" v-show="!selectTarget">
+      <ScreenCard title="科室项目分布" v-show="!selectTarget && query.type != 7">
         <Echarts style="height: 10rem" :options="ecOptions.deptProjectOptions"></Echarts>
       </ScreenCard>
       <div class="dept-gantt-table" v-show="!selectTarget">
@@ -268,7 +268,7 @@ setPieData(ecOptions.projectStatusPie4, pie4Config)
 ecOptions.projectStatusPie4.series[0].center = ['30%', '50%'];
 ecOptions.projectStatusPie4.series[1].center = ['30%', '50%'];
 
-let query: any = {}
+let query = reactive<any>({})
 onMounted(() => {
   query = route.query as any
 
@@ -320,11 +320,21 @@ const getProjectNumTotal = () => {
   getReportDataByCond({type, value: name})
     .then(res => {
       const {project_num, run_project, project_delay_rate, once_product_rate, run_product,project_state, project_urgent_state, project_warn_state, designer_stat, group_stat } = res.data || {}
-      totalData.totalItems[3].value = project_num || 0
-      totalData.totalItems[4].value = run_project || 0
-      totalData.totalItems[5].value = project_delay_rate || 0
-      totalData.totalItems[6].value = once_product_rate || 0
-      totalData.totalItems[7].value = run_product || 0
+      console.log(query.type);
+      if (query.type == 7) {
+        totalData.totalItems[1].value = project_num || 0
+        totalData.totalItems[2].value = run_project || 0
+        totalData.totalItems[3].value = project_delay_rate || 0
+        totalData.totalItems[4].value = once_product_rate || 0
+        totalData.totalItems[5].value = run_product || 0
+      } else {
+
+        totalData.totalItems[3].value = project_num || 0
+        totalData.totalItems[4].value = run_project || 0
+        totalData.totalItems[5].value = project_delay_rate || 0
+        totalData.totalItems[6].value = once_product_rate || 0
+        totalData.totalItems[7].value = run_product || 0
+      }
 
       pie1.map(item => {
         item.value = project_state[item.key] || 0
@@ -341,7 +351,7 @@ const getProjectNumTotal = () => {
       setPieData(ecOptions.projectStatusPie3, pie3, `在研项目\n预警状态\n分布`)
       
       const pie4Keys = Object.keys(group_stat)
-      const pie4Color = [['#6DD400', '#4A9400'], ['#4E66FA', '#3D55E8'], ['#46F9FF'], ['#1DD2D8']]
+      const pie4Color = [['#6DD400', '#4A9400'], ['#4E66FA', '#3D55E8'], ['#46F9FF', '#1DD2D8']]
       const pie4 = pie4Keys.map((key, i) => {
         return { name: key, color: pie4Color[i][0], innerColor: pie4Color[i][1], value: group_stat[key] }
       })
